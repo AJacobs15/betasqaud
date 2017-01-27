@@ -3,11 +3,14 @@ import requests
 import os
 import bs4
 
-print("hello")
-limiting_domain = "sports.yahoo.com/nba"
-starting_url = "http://sports.yahoo.com/nba/teams/"
 
-print(starting_url)
+limiting_domain = "sports.yahoo.com"
+limiting_path = "/nba"
+starting_url = "http://sports.yahoo.com/nba/teams/"
+player_url = "https://sports.yahoo.com/nba/players/5066/"
+roster_url = "http://sports.yahoo.com/nba/teams/gsw/roster"
+bad_url = "http://sports.yahoo.com/thevertical/woj/"
+
 
 ######### DO NOT CHANGE THIS CODE  #########
 
@@ -151,30 +154,45 @@ def is_url_ok_to_follow(url, limiting_domain):
         #return False
 
     parsed_url =  urllib.parse.urlparse(url)
-    print(parsed_url.scheme)
+    
+
     if parsed_url.scheme != "http" and parsed_url.scheme != "https":
-        print("oh no")
+        #print("oh no")
         return False
 
 
     
     if parsed_url.netloc == "":
-      
+        #print("empty string")
         return False
 
  
+
+
     if parsed_url.fragment != "":
-       
+        #print("A")
         return False
 
     if parsed_url.query != "":
+        #print("B")
         return False
 
+
+    path = parsed_url.path
+    if path[:4] != limiting_path:
+        #print("D")
+        #use regular expressions to just get teams, players?
+        #probably a good idea
+        return False
 
     loc = parsed_url.netloc
     ld = len(limiting_domain)
     trunc_loc = loc[-(ld+1):]
+
+
+    
     if not (limiting_domain == loc or (trunc_loc == "." + limiting_domain)):
+        #print("C")
         return False
 
     # does it have the right extension

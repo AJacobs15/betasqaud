@@ -1,5 +1,5 @@
 import re
-import util
+import utility
 import bs4
 import queue
 import json
@@ -9,8 +9,9 @@ import csv
 
 
 
-limiting_domain = "sports.yahoo.com/nba"
+limiting_domain = "sports.yahoo.com"
 starting_url = "http://sports.yahoo.com/nba/teams/"
+limiting_path = "/nba"
 
 
 
@@ -25,18 +26,18 @@ def generate_links(initial_url):
     '''
     #reach out to web page
 
-    req1 = util.get_request(initial_url)
+    req1 = utility.get_request(initial_url)
 
     if req1 == None:
         print("Uh oh")
         return [] #can't generate request
 
-    proper_url = util.get_request_url(req1)
+    proper_url = utility.get_request_url(req1)
     print(proper_url)
     
-    if util.is_url_ok_to_follow(proper_url, limiting_domain):
+    if utility.is_url_ok_to_follow(proper_url, limiting_domain):
         print("following")
-        text = util.read_request(req1)
+        text = utility.read_request(req1)
         soup = bs4.BeautifulSoup(text, "html5lib")
         links_list = soup.find_all("a")
 
@@ -46,14 +47,14 @@ def generate_links(initial_url):
         s = set()
         for link in links_list:
             url = link.get('href')
-            new_url = util.remove_fragment(url)
+            new_url = utility.remove_fragment(url)
 
-            converted_url = util.convert_if_relative_url(proper_url, new_url)
+            converted_url = utility.convert_if_relative_url(proper_url, new_url)
 
 
             converted_url = str(converted_url)
             if converted_url != None:
-                if util.is_url_ok_to_follow(converted_url, limiting_domain):
+                if utility.is_url_ok_to_follow(converted_url, limiting_domain):
                     if converted_url not in s:
 
                         s.add(converted_url)
