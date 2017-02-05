@@ -6,13 +6,9 @@ import json
 import sys
 import csv
 
-
-
-
 limiting_domain = "sports.yahoo.com"
 starting_url = "http://sports.yahoo.com/nba/teams/"
 limiting_path = "/nba"
-
 
 
 def generate_links(initial_url):
