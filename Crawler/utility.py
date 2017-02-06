@@ -43,6 +43,23 @@ def get_request(url):
     return r
 
 
+
+def write_to_file():
+
+    r = get_request(player_url)
+    s = read_request(r)
+
+
+    f = open("info.txt","w") #opens file with name of "test.txt"
+
+    f.write(str(s))
+
+    f.close()
+
+
+
+
+
 def read_request(request):
     '''
     Return data from request object.  Returns result or "" if the read
@@ -50,7 +67,8 @@ def read_request(request):
     '''
 
     try:
-        return request.text.encode('iso-8859-1')
+        #return request.text.encode('iso-8859-1')
+        return request.text.encode()
     except:
         print("read failed: " + request.url)
         return ""
