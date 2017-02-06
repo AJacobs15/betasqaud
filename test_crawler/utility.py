@@ -4,12 +4,19 @@ import os
 import bs4
 
 
-limiting_domain = "sports.yahoo.com"
+'''limiting_domain = "sports.yahoo.com"
 limiting_path = "/nba"
 starting_url = "http://sports.yahoo.com/nba/teams/"
 player_url = "https://sports.yahoo.com/nba/players/5066/"
 roster_url = "http://sports.yahoo.com/nba/teams/gsw/roster"
-bad_url = "http://sports.yahoo.com/thevertical/woj/"
+bad_url = "http://sports.yahoo.com/thevertical/woj/"'''
+
+
+
+limiting_domain = "basketball.realgm.com"
+starting_url = "http://basketball.realgm.com/nba/teams"
+limiting_path = "/nba/teams"
+
 
 
 ######### DO NOT CHANGE THIS CODE  #########
