@@ -1,5 +1,5 @@
 import re
-import utility
+import utility as util
 import bs4
 import queue
 import json
@@ -20,20 +20,20 @@ def generate_links(initial_url):
     '''
     #reach out to web page
 
-    req1 = utility.get_request(initial_url)
+    req1 = util.get_request(initial_url)
 
     if req1 == None:
         print("Uh oh")
         return [] #can't generate request
 
-    proper_url = utility.get_request_url(req1)
+    proper_url = util.get_request_url(req1)
     print(proper_url)
     
-    if utility.is_url_ok_to_follow(proper_url, limiting_domain):
+    if util.is_url_ok_to_follow(proper_url, limiting_domain):
         print("following")
-        text = utility.read_request(req1)
+        text = util.read_request(req1)
         soup = bs4.BeautifulSoup(text, "html5lib")
-        links_list = soup.find_all("a")
+        links_list = soup.find_all("a", string = "Stats")
 
 
         #find links
@@ -41,14 +41,14 @@ def generate_links(initial_url):
         s = set()
         for link in links_list:
             url = link.get('href')
-            new_url = utility.remove_fragment(url)
+            new_url = util.remove_fragment(url)
 
-            converted_url = utility.convert_if_relative_url(proper_url, new_url)
+            converted_url = util.convert_if_relative_url(proper_url, new_url)
 
 
             converted_url = str(converted_url)
             if converted_url != None:
-                if utility.is_url_ok_to_follow(converted_url, limiting_domain):
+                if util.is_url_ok_to_follow(converted_url, limiting_domain):
                     if converted_url not in s:
 
                         s.add(converted_url)
