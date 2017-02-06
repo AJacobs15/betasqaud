@@ -29,7 +29,7 @@ def generate_links(initial_url):
         return [] #can't generate request
 
     proper_url = utility.get_request_url(req1)
-    print(proper_url)
+    #print(proper_url)
     
     if utility.is_url_ok_to_follow(proper_url, limiting_domain):
         print("following")

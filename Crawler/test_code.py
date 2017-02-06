@@ -1,5 +1,5 @@
 import re
-import util
+import utility
 import bs4
 import queue
 import json
@@ -13,17 +13,12 @@ INDEX_IGNORE = set(['a',  'also',  'an',  'and',  'are', 'as',  'at',  'be',
                     'such',  'that',  'the',  'their',  'this',  'through',  'to',
                     'topics',  'units', 'we', 'were', 'which', 'will', 'with', 'yet'])
 
-starting_url = "http://www.classes.cs.uchicago.edu/archive/2015/winter/12200-1/new.collegecatalog.uchicago.edu/index.html"
-limiting_domain = "classes.cs.uchicago.edu"
-new_starting_url = "https://www.classes.cs.uchicago.edu/archive/2015/winter/12200-1/new.collegecatalog.uchicago.edu/azindex/index.html"
-
-research_url = "https://www.classes.cs.uchicago.edu/archive/2015/winter/12200-1/new.collegecatalog.uchicago.edu/thecollege/researchopportunities/index.html"
-
-
-test_url = "https://www.classes.cs.uchicago.edu/archive/2015/winter/12200-1/new.collegecatalog.uchicago.edu/thecollege/academicadvising/index.html"
-bad_url = " https://www.classes.cs.uchicago.edu/archive/2015/winter/12200-1/new.collegecatalog.uchicago.edu/thecollege/academicadvising/index.html"
-
-test_link_2 = "https://piazza.com/class/ixfpojf5re9363?cid=168"
+limiting_path = "/nba"
+limiting_domain = "sports.yahoo.com"
+starting_url = "http://sports.yahoo.com/nba/teams/"
+player_url = "https://sports.yahoo.com/nba/players/5066/"
+roster_url = "http://sports.yahoo.com/nba/teams/gsw/roster"
+bad_url = "http://sports.yahoo.com/thevertical/woj/"
 
 def generate_links(initial_url):
     '''
