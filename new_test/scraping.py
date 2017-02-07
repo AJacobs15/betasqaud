@@ -35,7 +35,7 @@ def get_data(soup, d):
         for i in range(21):
             player_info.append(t.text)
             t = t.next_sibling
-        d[team_name] += [player_name, player_info]
+        d[team_name].append((player_name, player_info))
     return d
 
 
