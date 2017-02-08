@@ -23,10 +23,8 @@ def generate_links(soup, proper_url, limiting_domain):
     off of these web pages.
     '''
     #reach out to web page
-
     
     links_list = soup.find_all("a", string = "Stats")
-
 
     #find links
     rv = []
@@ -149,6 +147,49 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
     return return_dict
 
 
+def create_csv(dictionary):
+    with open('nba.csv', 'w') as csvfile:
+        for team in dictionary.keys():
+
+
+
+
+
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                for stat in stats:
+                    stat = str(stat)
+                    team = team.replace(" ", "")
+                    player = player.replace(" ", "")
+                    writer = csv.writer(csvfile, delimiter='|')
+                    writer.writerow([team, player, stat])
+
+
+def create_csv(dictionary):
+    t = 0
+    p = 0
+    for team in dictionary.keys():
+        t_id = t
+        t += 1
+        with open('team_id.csv', 'w') as csvfile: # creating id_table for team
+                writer = csv.writer(csvfile, delimiter='|')
+                writer.writerow([t_id, team])
+        for x in dictionary[team]:
+            player = x[0]
+            stats = x[1]
+            p_id = p 
+            p += 1
+            with open('player_id.csv', 'w') as csvfile: # creating id_table for player
+                writer = csv.writer(csvfile, delimiter='|')
+                writer.writerow([p_id, player])
+            with open('team_players.csv', 'w') as csvfile: # creating players on team
+                writer = csv.writer(csvfile, delimiter='|')
+                writer.writerow([p_id, player, t_id, team])
+            with open('player_stats.csv', 'w') as csvfile: # creating stats for each player
+                stat = str(stats)
+                writer = csv.writer(csvfile, delimiter='|')
+                writer.writerow([p_id, player, t_id, team, stat])
 
 
 
