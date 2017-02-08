@@ -148,49 +148,54 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
 
 
 def create_csv(dictionary):
-    with open('nba.csv', 'w') as csvfile:
+    with open('team_id.csv', 'w') as csvfile1: # creating id_table for team
+        t = 1
+        p = 40
         for team in dictionary.keys():
-
-
-
-
-
+            t_id = t
+            t += 1
+            writer = csv.writer(csvfile1, delimiter='|')
+            writer.writerow([t_id, team])
+    with open('player_id.csv', 'w') as csvfile2: # creating id_table for player
+        t = 0
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
             for x in dictionary[team]:
                 player = x[0]
                 stats = x[1]
-                for stat in stats:
-                    stat = str(stat)
-                    team = team.replace(" ", "")
-                    player = player.replace(" ", "")
-                    writer = csv.writer(csvfile, delimiter='|')
-                    writer.writerow([team, player, stat])
-
-
-def create_csv(dictionary):
-    t = 0
-    p = 0
-    for team in dictionary.keys():
-        t_id = t
-        t += 1
-        with open('team_id.csv', 'w') as csvfile: # creating id_table for team
-                writer = csv.writer(csvfile, delimiter='|')
-                writer.writerow([t_id, team])
-        for x in dictionary[team]:
-            player = x[0]
-            stats = x[1]
-            p_id = p 
-            p += 1
-            with open('player_id.csv', 'w') as csvfile: # creating id_table for player
-                writer = csv.writer(csvfile, delimiter='|')
-                writer.writerow([p_id, player])
-            with open('team_players.csv', 'w') as csvfile: # creating players on team
-                writer = csv.writer(csvfile, delimiter='|')
+                p_id = p 
+                p += 1
+                writer = csv.writer(csvfile2, delimiter='|')
+                writer.writerow([p_id, player])       
+    with open('team_players.csv', 'w') as csvfile3: # creating players on team
+        t = 0
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                p_id = p 
+                p += 1
+                writer = csv.writer(csvfile3, delimiter='|')
                 writer.writerow([p_id, player, t_id, team])
-            with open('player_stats.csv', 'w') as csvfile: # creating stats for each player
+    with open('player_stats.csv', 'w') as csvfile4: # creating stats for each player
+        t = 0
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                p_id = p 
+                p += 1
                 stat = str(stats)
-                writer = csv.writer(csvfile, delimiter='|')
-                writer.writerow([p_id, player, t_id, team, stat])
-
+                writer = csv.writer(csvfile4, delimiter='|')
+                writer.writerow([p_id, player, t_id, team, stat])   
 
 
 
