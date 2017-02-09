@@ -157,7 +157,7 @@ def create_csv(dictionary):
             writer = csv.writer(csvfile1, delimiter='|')
             writer.writerow([t_id, team])
     with open('player_id.csv', 'w') as csvfile2: # creating id_table for player
-        t = 0
+        t = 1
         p = 40
         for team in dictionary.keys():
             t_id = t
@@ -170,7 +170,7 @@ def create_csv(dictionary):
                 writer = csv.writer(csvfile2, delimiter='|')
                 writer.writerow([p_id, player])       
     with open('team_players.csv', 'w') as csvfile3: # creating players on team
-        t = 0
+        t = 1
         p = 40
         for team in dictionary.keys():
             t_id = t
@@ -183,7 +183,7 @@ def create_csv(dictionary):
                 writer = csv.writer(csvfile3, delimiter='|')
                 writer.writerow([p_id, player, t_id, team])
     with open('player_stats.csv', 'w') as csvfile4: # creating stats for each player
-        t = 0
+        t = 1
         p = 40
         for team in dictionary.keys():
             t_id = t
