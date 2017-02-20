@@ -22,22 +22,29 @@ def get_data(soup, d):
 
     
     team_name = get_team_name(soup)
-
     if team_name not in d:
         d[team_name] = []
     
-    tag_list = soup.find_all("td", class_ = 'nowrap')
-    for tag in tag_list:
+        tag_list = soup.find_all("td", class_ = 'nowrap')
 
-        player_name = tag.text
-        player_info = []
-        t = tag.next_sibling
-        for i in range(21):
-            player_info.append(t.text)
-            t = t.next_sibling
-        player_info = player_info[1:]
-        player_info = [float(x) for x in player_info]
-        d[team_name].append((player_name, player_info))
+        s = set()
+        for tag in tag_list:
+
+            player_name = tag.text
+            #print(player_name)
+            player_info = []
+            t = tag.next_sibling
+            for i in range(21):
+                player_info.append(t.text)
+                t = t.next_sibling
+            player_info = player_info[1:]
+            player_info = [float(x) for x in player_info]
+            
+
+            if player_name not in s:
+                d[team_name].append((player_name, player_info))
+                s.add(player_name)
+            #print()
     return d
 
 
@@ -52,6 +59,13 @@ def get_team_name(soup):
     word_list = re.findall('[A-Z]+[a-z]+ [A-Z]+[a-z]+', tag_string)
     team_name = word_list[0]
     return team_name
+
+
+
+
+
+
+
 def get_team_stats(d):
 
     for key, value in d.items():

@@ -117,6 +117,9 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
     
     proper_url, soup = make_soup(starting_url, limiting_domain)
     starting_links = generate_links(soup, proper_url, limiting_domain)
+
+
+    #print(starting_links)
     
     return_dict = {}
 
@@ -143,13 +146,118 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
                     q.put(link) 
 
         steps += 1 
-        new_queue, next_link, indicator = get_next_link(visited, q) 
+        new_queue, next_link, indicator = get_next_link(visited, q)
+
         q = new_queue
+
+
+
+    
+    return clean_return_dict(return_dict)
+
+
+
+def clean_return_dict(return_dict):
+    del return_dict["Scoring Per"]
+    return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
+    return_dict['Golden State Warriors'] = return_dict.pop('Golden State')
+    return_dict['New York Knicks'] = return_dict.pop('New York')
+    return_dict['Oklahoma City Thunder'] = return_dict.pop('Oklahoma City')
+    return_dict['San Antonio Spurs'] = return_dict.pop('San Antonio')
+    return_dict['Portland Trail Blazers'] = return_dict.pop('Portland Trail')
+    return_dict['New Orleans Pelicans'] = return_dict.pop('New Orleans')
+
+    '''for team, stat_list in return_dict.items():
+
+        s = set()
+        nl = []
+        for player_tupl in stat_list:
+            
+            name = player_tupl[0]
+            stats = player_tupl[1]
+            if name not in s:
+                s.add(name)
+                nl.append((name, stats))
+        return_dict[team] = nl'''
+
+
+
 
     return return_dict
 
+def test1(d):
+    team = d["Boston Celtics"]
+    print(len(team))
+    s = set()
+    cnt = 0
+    for player_t in team:
+        name = player_t[0]
+        stats = player_t[1]
+        if name not in s:
+            
+            print(name)
+            print(stats)
+            print()
+            cnt += 1
+            s.add(name)
+    return cnt
 
 
 
 
+
+
+
+
+def test(d):
+    s = set()
+
+    dic = {}
+    cnt = 0
+    for k, v in d.items():
+        for val in v:
+            name = val[0]
+            stats = val[1]
+            if name not in s:
+                s.add(name)
+            else:
+                cnt += 1
+                if name not in dic:
+                    dic[name] = [k]
+                else:
+                    dic[name].append(k)
+                print(name, stats)
+                print()
+    return cnt, dic
+          
+
+
+def test2(d):
+    for k, v in d.items():
+        if len(v) > 15:
+            print(k, len(v))
+def test3(d):
+    for k, v in d.items():
+        print(k, len(v))
+
+def test4(d):
+    s = set()
+    for k in d.keys():
+        if k not in s:
+            s.add(k)
+        else:
+            print("duplicate", k)
+
+'''
+            s.append()
+    s2 = set(s)
+
+    print(len(s))
+    print(len(s2))
+    if len(s) != len(s2):
+        return False
+    else:
+        return True
+
+'''
 
