@@ -23,10 +23,8 @@ def generate_links(soup, proper_url, limiting_domain):
     off of these web pages.
     '''
     #reach out to web page
-
     
     links_list = soup.find_all("a", string = "Stats")
-
 
     #find links
     rv = []
@@ -205,7 +203,55 @@ def test1(d):
 
 
 
-
+def create_csv(dictionary):
+    with open('team_id.csv', 'w') as csvfile1: # creating id_table for team
+        t = 1
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            writer = csv.writer(csvfile1, delimiter='|')
+            writer.writerow([t_id, team])
+    with open('player_id.csv', 'w') as csvfile2: # creating id_table for player
+        t = 1
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                p_id = p 
+                p += 1
+                writer = csv.writer(csvfile2, delimiter='|')
+                writer.writerow([p_id, player])       
+    with open('team_players.csv', 'w') as csvfile3: # creating players on team
+        t = 1
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                p_id = p 
+                p += 1
+                writer = csv.writer(csvfile3, delimiter='|')
+                writer.writerow([p_id, player, t_id, team])
+    with open('player_stats.csv', 'w') as csvfile4: # creating stats for each player
+        t = 1
+        p = 40
+        for team in dictionary.keys():
+            t_id = t
+            t += 1
+            for x in dictionary[team]:
+                player = x[0]
+                stats = x[1]
+                p_id = p 
+                p += 1
+                stat = str(stats)
+                writer = csv.writer(csvfile4, delimiter='|')
+                writer.writerow([p_id, player, t_id, team, stat])   
 
 
 
