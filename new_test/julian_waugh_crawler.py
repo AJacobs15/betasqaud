@@ -6,6 +6,7 @@ import json
 import sys
 import csv
 import scraping
+import numpy as np
 
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
@@ -307,3 +308,33 @@ def test4(d):
 
 '''
 
+
+
+def build_team_stats_dictionary(league_dictionary):
+
+    team_dictionary = {}
+
+    for key, value in league_dictionary.items():
+        team_name = key
+        tuple_list = value
+        
+        count = len(tuple_list)
+        l = [0] * 20
+        sum_ = np.array(l)
+
+        for tup in tuple_list:
+            stats = tup[1]
+            stats = np.array([float(v) for v in stats])
+            cnt = 0
+            '''for s in stats:
+                print(type(s))
+                cnt += 1
+            print('count', cnt)'''
+            sum_ += stats
+
+        avg = 1/count * sum_
+        avg = list(avg)
+
+        team_dictionary[team_name] = avg
+
+    return team_dictionary
