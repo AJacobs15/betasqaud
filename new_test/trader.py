@@ -20,40 +20,28 @@ final_dict = C.build_team_stats_dictionary(first_dict)
 
 
 
-
-for x in first_dict.keys():
-    w_team = first_dict[x]
-    w_stat = final_dict[x]
-    team = []
-    for pair in w_team:
-        player = []
-        player.append(pair[0])
-        player = player
-        minutes = pair[1][1]
-        rest_of_stats = pair[1][2:]
-        count = 0
-        for stat in rest_of_stats:
-            new_stat = stat/minutes
-            rest_of_stats[count] = new_stat
-            count += 1
-        combined = tuple(player + rest_of_stats)
-        team.append(combined)
-    new_team = pd.DataFrame(team)
-
-    updated = []
-    team_name = []
-    new = []
-    team_name.append(x)
-    rest = w_stat[2:]
-    time = w_stat[1]
-    new_count = 0
-    for t_stat in rest:
-        rest[new_count] = t_stat/time
-        new_count += 1
-    new_combined = tuple(team_name + rest)
-    new.append(new_combined)
-    updated_team = pd.DataFrame(new)
-
-
-    result = pd.concat([new_team, updated_team])
-    result = result.reset_index(drop=True)
+def find_dataframe(first_dict):
+    for x in first_dict.keys():
+        w_team = first_dict[x]
+        team = []
+        list_mean = []
+        list_mean.append(x)
+        for pair in w_team:
+            player = []
+            player.append(pair[0])
+            player = player
+            minutes = pair[1][1]
+            rest_of_stats = pair[1][2:]
+            count = 0
+            for stat in rest_of_stats:
+                new_stat = stat/minutes
+                rest_of_stats[count] = new_stat
+                count += 1
+            combined = tuple(player + rest_of_stats)
+            team.append(combined)
+        new_team = pd.DataFrame(team)
+        mean = new_team.mean()
+        for y in mean:
+            list_mean.append(y)
+        new_team.loc[len(new_team)] = list_mean
+    return new_team
