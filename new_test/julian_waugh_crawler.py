@@ -13,7 +13,7 @@ starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
 
 
-
+bad_link = 'http://basketball.realgm.com/nba/stats'
 
 
 def generate_links(soup, proper_url, limiting_domain):
@@ -82,6 +82,94 @@ def get_next_link(set_, queue):
 
 
 
+
+
+
+def turn_starting_links_to_roster_dictionary(starting_links, limiting_domain):
+    '''
+    I am not crawling again. Instead, I will leverage symmetry in website urls.
+    Returns a dictionary that maps team name to players.
+    Note that we cannot use this for finding the statistics because
+    '''
+    add_string = 'Rosters/Regular/2017'
+    l = 'http://basketball.realgm.com/nba/stats'
+    bad_index = -19
+
+
+    #this might be the source of multiplicity - maybe delete from other crawler (take care of that later...)
+    #use this to leverage multiplicity
+    #first thing when you get back - take care of scoring pe
+
+
+    rv = {}
+    for link in list(set(starting_links)):
+        if link != l:
+           link = link[: bad_index] + add_string
+           name = get_team_name(link)
+           player_set = build_real_roster(link, limiting_domain)
+           rv[name] = player_set
+    return rv           
+
+
+
+
+
+def check_roster_size(roster_d):
+    for k, v in roster_d.items():
+        print(k, len(v))
+
+
+
+
+s2 = 'http://basketball.realgm.com/nba/teams/Boston-Celtics/2/Stats/2017/Averages'
+
+
+
+def get_team_name(string):
+    first_index = 6
+    name = re.findall('teams/[A-Za-z-]+', string)[0]
+    rv = name[first_index:].replace('-', ' ')
+    return rv
+
+
+def first_last_name(string):
+    '''
+    Each player has their name coded 'lastname, firstname'. Even if they are a 'Jr'
+    etc. 
+    '''
+
+    list_string = string.split(',')
+    rv = list_string[1][1:] + ' ' + list_string[0]
+    return rv
+    
+def build_real_roster(link, limiting_domain):
+    '''
+    Takes a link to a roster page and the limiting domain associated with that page.
+    Returns a list set containing the player names
+    '''
+    proper_url, soup = make_soup(link, limiting_domain)
+
+    header = soup.find_all("thead")
+    table = header[0].next_sibling.next_sibling
+
+    cells = table.find_all('tr')
+
+    rv = set()
+    for cell in cells:
+        name = get_name(cell)
+        name = first_last_name(name)
+        rv.add(name)
+    return rv
+
+def get_name(cell):
+    '''
+    Given a cell in a table containing roster names for a team, returns the 
+    name of the player.
+    '''
+    td_list = cell.find_all('td')
+    name = td_list[1]['rel']
+    return name
+
 def make_soup(initial_url, limiting_domain):
     '''
     Given a url and a limiting domain, returns the proper url 
@@ -116,7 +204,10 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
     
     proper_url, soup = make_soup(starting_url, limiting_domain)
     starting_links = generate_links(soup, proper_url, limiting_domain)
+    #starting_links = [x for x in starting_links if x != bad_link]
 
+
+    roster_dict = turn_starting_links_to_roster_dictionary(starting_links, limiting_domain)
 
     #print(starting_links)
     
@@ -152,11 +243,15 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
 
 
     
-    return clean_return_dict(return_dict)
+    return clean_return_dict(roster_dict, return_dict)
 
 
 
-def clean_return_dict(return_dict):
+def clean_return_dict(roster_dict, return_dict):
+    '''
+    gets rid of all of the weird categories in the return dictionary from the crawler.
+    Additionally, updates names.
+    '''
     del return_dict["Scoring Per"]
     return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
     return_dict['Golden State Warriors'] = return_dict.pop('Golden State')
@@ -182,7 +277,7 @@ def clean_return_dict(return_dict):
 
 
 
-    return return_dict
+    return eliminate_multiplicity(roster_dict, return_dict)
 
 def test1(d):
     team = d["Boston Celtics"]
@@ -200,6 +295,81 @@ def test1(d):
             cnt += 1
             s.add(name)
     return cnt
+
+
+
+
+def search_for_multiplicity(return_dict):
+    '''
+    A test for multiplicity in player names, caused by trades
+    '''
+    multiplicity = {}
+    #s = set()
+    
+    for team, team_list in return_dict.items():
+        for player_tupl in team_list:
+            player = player_tupl[0]
+            if player not in multiplicity:
+                multiplicity[player] = [team]
+            else:
+                multiplicity[player] += [team]
+
+
+    #print(multiplicity)
+    m =  {}
+    for player, teams in multiplicity.items():
+        if len(teams) != 1:
+            m[player] = teams
+    return m
+
+
+def eliminate_multiplicity(roster_dict, return_dict):
+    multiplicity_dict = search_for_multiplicity(return_dict)
+
+    players_to_elimate = {}
+    
+    for player, teams in multiplicity_dict.items():
+        for team in teams:
+            if player not in roster_dict[team]:
+                if team not in players_to_elimate:
+                    players_to_elimate[team] = {player}
+                else:
+                    players_to_elimate[team].add(player)
+    
+
+    for team in players_to_elimate:
+        wrong_players = players_to_elimate[team]
+        roster = return_dict[team]
+
+        new_team = []
+        for data_tupl in roster:
+            player = data_tupl[0]
+            if player not in wrong_players:
+                new_team.append(data_tupl)
+        return_dict[team] = new_team
+
+    return return_dict
+
+
+
+
+def search_for_three_word_names(return_dict):
+    rv = []
+    for team, team_list in return_dict.items():
+            for player_tupl in team_list:
+                player = player_tupl[0]
+                name = player.split(' ')
+                if len(name) > 2:
+                    rv.append(player)
+    return rv
+
+
+
+
+
+
+
+
 
 
 
@@ -325,6 +495,7 @@ def build_team_stats_dictionary(league_dictionary):
         for tup in tuple_list:
             stats = tup[1]
             stats = np.array([float(v) for v in stats])
+            print(stats)
             cnt = 0
             '''for s in stats:
                 print(type(s))

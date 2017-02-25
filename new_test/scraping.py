@@ -66,30 +66,7 @@ def get_team_name(soup):
 
 
 
-def get_team_stats(d):
 
-    for key, value in d.items():
-        team_name = key
-        tuple_list = value
-
-
-
-        count = len(tuple_list)
-        sum_ = np.array([])
-
-        for tup in tuple_list:
-            stats = tup[1]
-            stats = stats[1:]
-            stats = [float(v) for v in stats]
-            #tup[1] = stats
-            stats = np.array(stats)
-            sum_ += stats
-
-        avg = 1/count * sum_
-
-        d[key]["team_stats"] = avg
-
-    return d
 
 
 
