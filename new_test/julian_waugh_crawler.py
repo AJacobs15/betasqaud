@@ -115,6 +115,11 @@ def turn_starting_links_to_roster_dictionary(starting_links, limiting_domain):
 
 
 def check_roster_size(roster_d):
+    '''
+    Simple function for test purposes. Loops over all of the teams in the 
+    league dictionary. Delete before submitting because we do not want them 
+    to see that some teams are too long.
+    '''
     for k, v in roster_d.items():
         print(k, len(v))
 
@@ -126,6 +131,11 @@ s2 = 'http://basketball.realgm.com/nba/teams/Boston-Celtics/2/Stats/2017/Average
 
 
 def get_team_name(string):
+    '''
+    string is a url. Captures the team name for that url.
+    Then, returns it as a string without any dashes.
+
+    '''
     first_index = 6
     name = re.findall('teams/[A-Za-z-]+', string)[0]
     rv = name[first_index:].replace('-', ' ')
@@ -134,8 +144,10 @@ def get_team_name(string):
 
 def first_last_name(string):
     '''
-    Each player has their name coded 'lastname, firstname'. Even if they are a 'Jr'
-    etc. 
+    All of the player's names appear on the page in lastname, firstname order.
+    Returns the actual name.
+
+    Example: Wade, Dwayne --> Dwayne Wade
     '''
 
     list_string = string.split(',')
@@ -145,7 +157,8 @@ def first_last_name(string):
 def build_real_roster(link, limiting_domain):
     '''
     Takes a link to a roster page and the limiting domain associated with that page.
-    Returns a list set containing the player names
+    Returns a list set containing the player names for that team. This is necessary
+    because the stats page contains some multiplicity. 
     '''
     proper_url, soup = make_soup(link, limiting_domain)
 
@@ -225,12 +238,7 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
         new_proper_url, rv = make_soup(next_link, limiting_domain)
         if rv != []:
             links = generate_links(rv, new_proper_url, limiting_domain) 
-            
-
-
             return_dict = scraping.get_data(rv, return_dict)
-            
-            
             for link in links:
                 if link not in visited:
                     q.put(link) 
@@ -301,7 +309,10 @@ def test1(d):
 
 def search_for_multiplicity(return_dict):
     '''
-    A test for multiplicity in player names, caused by trades
+    A test for multiplicity in player names, caused by trades.
+    Takes in a dictionary describing the league.
+    Returns a dictionary mapping each player who is on 
+    multiple teams to the team on which they play.
     '''
     multiplicity = {}
     #s = set()
@@ -324,6 +335,11 @@ def search_for_multiplicity(return_dict):
 
 
 def eliminate_multiplicity(roster_dict, return_dict):
+    '''
+    Given a dictionary describing the statistics of the entire league (return_dict)
+    and roster_dict, a dictionary describing the accurate rosters of the entire league,
+    returns a an updated league_statistic dictionary without any multiplicity.
+    '''
     multiplicity_dict = search_for_multiplicity(return_dict)
 
     players_to_elimate = {}
@@ -354,6 +370,12 @@ def eliminate_multiplicity(roster_dict, return_dict):
 
 
 def search_for_three_word_names(return_dict):
+    '''
+    Simple test for three word names. Delete before submitting
+    because we don't want them to know about this.
+
+    Alternatively, we could hardcode these guys in.
+    '''
     rv = []
     for team, team_list in return_dict.items():
             for player_tupl in team_list:
@@ -362,16 +384,6 @@ def search_for_three_word_names(return_dict):
                 if len(name) > 2:
                     rv.append(player)
     return rv
-
-
-
-
-
-
-
-
-
-
 
 
 def create_csv(dictionary):
@@ -481,6 +493,11 @@ def test4(d):
 
 
 def build_team_stats_dictionary(league_dictionary):
+    '''
+    Given a dictionary describing league statistics for every team, 
+    uses numpy arrays to find an average statistic vector for each team.
+    Returns a dictionary mapping a team name to its average statistics.
+    '''
 
     team_dictionary = {}
 

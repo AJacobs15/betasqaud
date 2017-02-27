@@ -12,7 +12,9 @@ url2 = "http://basketball.realgm.com/nba/teams/Chicago-Bulls/4/Stats/2017/Averag
 
 def get_data(soup, d):
     '''
-    function for grabbing all of the data for a team and storing it in a dictionary. 
+    Function for grabbing all of the data for a team and storing it in a dictionary.
+    Soup is a soup object created from bs4. The dictionary is the league dictionary, which 
+    this function updates. 
     '''
     
     '''req1 = util.get_request(initial_url)
@@ -51,6 +53,7 @@ def get_data(soup, d):
 def get_team_name(soup):
     '''
     Uses regular expressions to grab the city and team name.
+    Operates on a page in the gm stats website. Returns the team name.
     '''
     tag_list = soup.find_all("meta")
     tag_string = tag_list[1]["content"]
