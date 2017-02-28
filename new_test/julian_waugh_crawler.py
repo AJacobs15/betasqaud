@@ -88,7 +88,7 @@ def get_next_link(set_, queue):
 def turn_starting_links_to_roster_dictionary(starting_links, limiting_domain):
     '''
     I am not crawling again. Instead, I will leverage symmetry in website urls.
-    Returns a dictionary that maps team name to players.
+    Returns a dictionary that maps team name to players and their respective player page links.
     Note that we cannot use this for finding the statistics because
     '''
     add_string = 'Rosters/Regular/2017'
@@ -106,8 +106,8 @@ def turn_starting_links_to_roster_dictionary(starting_links, limiting_domain):
         if link != l:
            link = link[: bad_index] + add_string
            name = get_team_name(link)
-           player_set = build_real_roster(link, limiting_domain)
-           rv[name] = player_set
+           player_d = build_real_roster(link, limiting_domain)
+           rv[name] = player_d
     return rv           
 
 
@@ -128,7 +128,7 @@ def check_roster_size(roster_d):
 
 s2 = 'http://basketball.realgm.com/nba/teams/Boston-Celtics/2/Stats/2017/Averages'
 
-
+s3 = 'http://basketball.realgm.com/nba/teams/Memphis-Grizzlies/14/Rosters/Regular/2017'
 
 def get_team_name(string):
     '''
@@ -149,16 +149,18 @@ def first_last_name(string):
 
     Example: Wade, Dwayne --> Dwayne Wade
     '''
-
-    list_string = string.split(',')
-    rv = list_string[1][1:] + ' ' + list_string[0]
-    return rv
+    if string == 'Oubre, Jr., Kelly':
+        return 'Kelly Oubre, Jr.' 
+    else:
+        list_string = string.split(',')
+        rv = list_string[1][1:] + ' ' + list_string[0]
+        return rv
     
 def build_real_roster(link, limiting_domain):
     '''
     Takes a link to a roster page and the limiting domain associated with that page.
-    Returns a list set containing the player names for that team. This is necessary
-    because the stats page contains some multiplicity. 
+    Returns a dictionary containing the player names for that team and their respective urls. This is necessary
+    because the stats page contains some multiplicity. We may need these urls later on, so we gather them here.
     '''
     proper_url, soup = make_soup(link, limiting_domain)
 
@@ -167,23 +169,72 @@ def build_real_roster(link, limiting_domain):
 
     cells = table.find_all('tr')
 
-    rv = set()
+    rv = {}
     for cell in cells:
-        name = get_name(cell)
+        name, link1 = get_name_get_link(cell)
         name = first_last_name(name)
-        rv.add(name)
+        rv[name] = link1
     return rv
 
-def get_name(cell):
+def get_name_get_link(cell):
     '''
     Given a cell in a table containing roster names for a team, returns the 
-    name of the player.
+    name of the player and the link associated with that player (this link may come in handy
+    much later when we return the advanced statistics, but this is the time to get it.)
     '''
     td_list = cell.find_all('td')
+    link = cell.find_all('a')[0]['href']
+    link = 'http://basketball.realgm.com' + link
+    #print(link)
+    #print(type(link))
     name = td_list[1]['rel']
-    return name
+    return name, link
 
-def make_soup(initial_url, limiting_domain):
+
+
+
+
+player_link = 'http://basketball.realgm.com/player/Tony-Allen/Summary/391'
+
+def get_individual_player_data(player_link, limiting_domain):
+    '''
+    Scrapes an individual player's page for qualitiative data and images 
+    for the final presentation.
+
+    Note, if you print the data string, it ends up nicely formatted. However, 
+    in its current form, it looks kinda gross.
+    '''
+
+
+    proper_url, soup = make_soup(player_link, limiting_domain, player_switch = True)
+
+    main_tag = soup.find_all('div', class_ = 'profile-box')[0]
+    data_string = main_tag.text
+
+    img_tags = main_tag.find_all('img')
+    img_links = []
+    for tag in img_tags:
+        img_links.append(tag['src'])
+
+    honor_tags = soup.find_all('h2')
+    award_list = []
+    for tag in honor_tags:
+        if tag.text == 'NBA Awards & Honors':
+            awards = tag.next_sibling.next_sibling.find_all('tr')
+            for t in awards:
+                award_list.append(t.text)
+    return data_string, img_links, award_list
+
+
+    
+s4 = 'http://basketball.realgm.com/player/LeBron-James/Summary/250'
+
+
+
+
+
+
+def make_soup(initial_url, limiting_domain, player_switch = False):
     '''
     Given a url and a limiting domain, returns the proper url 
     and the BeautifulSoup object associated with that page.
@@ -191,9 +242,15 @@ def make_soup(initial_url, limiting_domain):
     generate the links and build the index with the html page.
     Additionally, the html page cannot be reached,
     we return None and an empty list.
+
+    Note: player switch is an indicator that is used to allow us to 
+    got to a link we know is good. These links would get blocked
+    while crawling, but this is used when getting player stats, 
+    in which case we know that the link is good.
     '''
     req1 = util.get_request(initial_url)
     if req1 == None:
+        #print('bad')
         return None, [] #can't generate request
 
     proper_url = util.get_request_url(req1)
@@ -202,7 +259,13 @@ def make_soup(initial_url, limiting_domain):
         text = util.read_request(req1)
         soup = bs4.BeautifulSoup(text, "html5lib")
         return proper_url, soup
+    if player_switch:
+        #print('swtich')
+        text = util.read_request(req1)
+        soup = bs4.BeautifulSoup(text, "html5lib")
+        return proper_url, soup
     else:
+        #print('bad')
         return None, []
 
 
