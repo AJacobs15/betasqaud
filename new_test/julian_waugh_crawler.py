@@ -14,8 +14,6 @@ limiting_path = "/nba/teams"
 
 
 
-
-
 def generate_links(soup, proper_url, limiting_domain):
     '''
     Takes a url as input. Returns the urls of all of the pages linked 
@@ -338,3 +336,4 @@ def build_team_stats_dictionary(league_dictionary):
         team_dictionary[team_name] = avg
 
     return team_dictionary
+    
