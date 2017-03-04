@@ -17,6 +17,41 @@ starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
 
 
+def stats_to_name(return_dict):
+    '''
+    This function tests and idea that I had:
+    can we map the stats to the player using a 
+    dictionary, with the stats as strings as keys?
+
+    The answer is yes. However, I do not know how long the 
+    strings have to be. for example, I know if we have two-component
+    stat vectors it will be harder to do the mappings.
+
+    However, seems to work for now.
+    '''
+
+    s= set()
+
+    players = 0
+
+    stats_index = 1
+    name_index = 0
+    for team, team_list in return_dict.items():
+        for player_tupl in team_list:
+            players += 1
+            stats = player_tupl[stats_index]
+            name = player_tupl[name_index]
+
+            stats_string_list = [str(x) for x in stats]
+            stats_key = ' '.join(stats_string_list)
+            s.add(stats_key)
+
+    print('nba size', players)
+    print('dictionary size', len(s))
+
+
+
+
 
 
 def create_data():
@@ -154,7 +189,7 @@ def go():
     create_general_plot(data, 5)
 
 
-if __name__ == '__main__':
-    #print('go')
-    #go()
-    pass
+'''if __name__ == '__main__':
+    print('go')
+    go()
+    pass'''
