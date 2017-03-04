@@ -175,12 +175,130 @@ def create_testing_data_positions(data):
 
     return rv
 
+
+def create_testing_data_arthur(data):
+    '''
+    [games_played, minutes_per_game, three pointers made, rebounds per game, assists, steals, blocks, points]
+
+    by including games and minutes, I hope to partition the league into the different classes of positions (starters,
+        bench players, injured good players, role players etc)- very cool
+
+    '''
+    rv = []
+
+    three_pt_index = 7
+    field_goal_index = 4
+    free_throw_index = 10
+
+
+    for vector in data:
+        '''print(vector)
+        print(type(vector))
+        
+        a = vector[:2]
+        b = vector[5]
+        c = vector[-5:] 
+
+        print(a , b , c)'''
+
+        new_vector = vector[:2] + [vector[three_pt_index]] + [vector[free_throw_index]] + [vector[field_goal_index]] + vector[-5:]
+        rv.append(new_vector)
+
+    return rv
 def make_centroids(data):
-    reduced_data = create_testing_data_positions(data)
+    reduced_data = create_testing_data_arthur(data)
 
     kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
     kmeans.fit(reduced_data)
     print(kmeans.cluster_centers_)   
+
+
+
+
+
+
+
+def compare_player_to_centroid(centroid_vector, player_vector):
+    '''
+    makes a plot comparing the player stats to the stats at the centroid.
+
+    make sure that the vectors are five components long.
+
+    Re-adjust labes later - maybe make them a parameter?
+
+
+    http://matplotlib.org/examples/pylab_examples/barchart_demo.html
+
+
+    need to also print this stuff out
+
+
+    '''
+    n_groups = len(centroid_vector)
+
+
+    means_women = (25, 32, 34, 20, 25)
+    std_women = (3, 5, 2, 3, 3)
+
+    fig, ax = plt.subplots()
+
+    index = np.arange(n_groups)
+    bar_width = 0.35
+
+    opacity = 0.7
+    error_config = {'ecolor': '0.3'}
+
+    rects1 = plt.bar(index, centroid_vector, bar_width,
+                     alpha=opacity,
+                     color='k',
+                     error_kw=error_config,
+                     label='Centroid')
+
+    rects2 = plt.bar(index + bar_width, player_vector, bar_width,
+                     alpha=opacity,
+                     color='r',
+                     error_kw=error_config,
+                     label='Player_Name')
+
+    plt.xlabel('Categories')
+    plt.ylabel('stats')
+    plt.title('Comparison of Player to Average stats')
+    plt.xticks(index + bar_width / 2, ('A', 'B', 'C', 'D', 'E'))
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
+
+def test_plot():
+    c_vector = [11, 15, 40, 0, 3.5]
+    player_vector = [25, 9, 20, 3.2, 1]
+    compare_player_to_centroid(c_vector, player_vector)
+
+
+
+
+
+def predict_centroid(reduced_data):
+    '''
+    predicts the indexes of the cluster.
+    Note that you might wanna use fit_predict
+    '''
+    kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
+    kmeans.fit(reduced_data)
+    print(kmeans.cluster_centers_)
+    
+    for v in reduced_data:
+
+        print(kmeans.predict([v]), v)
+
+
+
+
+
+
+
 
 
 def go():
