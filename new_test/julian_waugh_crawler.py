@@ -11,10 +11,7 @@ import numpy as np
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
-
-
 bad_link = 'http://basketball.realgm.com/nba/stats'
-
 
 def generate_links(soup, proper_url, limiting_domain):
     '''
@@ -589,3 +586,4 @@ def build_team_stats_dictionary(league_dictionary):
         team_dictionary[team_name] = avg
 
     return team_dictionary
+    
