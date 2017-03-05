@@ -27,7 +27,7 @@ def selection(original_file, stat, minimum, maximum):
 
     return original_file
 
-def ideal_players(original_file, categories, minimums, maximums):
+def ideal_players(original_file, categories, minimums, maximums, test1=False):
     '''
     Takes in the users preferences for certain categories, returns a list
     of players that match all their preferences.
@@ -38,17 +38,47 @@ def ideal_players(original_file, categories, minimums, maximums):
         original_file = selection(original_file, stat, minimum, maximum)
         maximums = maximums[1:]
         minimums = minimums[1:]
-    players = []
-    for player in original_file.index:
-        players.append(player)
+    if test1 == True:
+        players = ideal_player_stats(original_file)
+    else:
+        players = just_players(original_file)
     
     return players
 
+def ideal_player_stats(original_file):
+    players = []
+    for player in original_file.index:
+        player_stats = []
+        player_stats.append(player)
+        for column in original_file:
+            player_file = original_file.loc[player]
+            value = player_file.loc[column]
+            player_stats.append(value)
+        players.append(player_stats)
+    
+    return players
 
-def test1(original_file):
+def just_players(original_file):
+    players = []
+    for player in original_file.index:
+        players.append(player)
+
+    return players
+
+
+def test1(filename=original_file):
     categories = ["GS", 'FGA', 'FTM']
     minimums = [50, 13, 2]
     maximums = [59, 17, 5]
-    players = ideal_players(original_file, categories, minimums, maximums)
+    players = ideal_players(filename, categories, minimums, maximums, test1=True)
+
+    return players
+
+def test2(filename=original_file):
+    categories = ["GS", 'FGA', 'FTM']
+    minimums = [50, 13, 2]
+    maximums = [59, 17, 5]
+
+    players = ideal_players(filename, categories, minimums, maximums)
 
     return players
