@@ -36,10 +36,8 @@ def ideal_players(original_file, categories, minimums, maximums):
         minimum = minimums[0]
         maximum = maximums[0]
         original_file = selection(original_file, stat, minimum, maximum)
-        if len(maximums) > 1:
-            maximums = maximums[1:]
-        if len(minimums) > 1:
-            minimums = minimums[1:]
+        maximums = maximums[1:]
+        minimums = minimums[1:]
     players = []
     for player in original_file.index:
         players.append(player)
