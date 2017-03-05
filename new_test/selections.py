@@ -45,3 +45,12 @@ def ideal_players(original_file, categories, minimums, maximums):
         players.append(player)
     
     return players
+
+
+def test1(original_file):
+    categories = ["GS", 'FGA', 'FTM']
+    minimums = [50, 13, 2]
+    maximums = [59, 17, 5]
+    players = ideal_players(original_file, categories, minimums, maximums)
+
+    return players
