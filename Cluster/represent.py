@@ -279,8 +279,8 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
 
 
     #print(type(centroid_percents), type(player_percents), type(centroid_flat), type(player_flat))
-
-
+    
+   
     #print(centroid_vector)
     #print(player_vector)
     n_groups = len(centroid_vector)
