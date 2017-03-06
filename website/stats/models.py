@@ -1,5 +1,4 @@
 from django.db import models
-import csv
 
 class Team(models.Model):
 
@@ -8,20 +7,15 @@ class Team(models.Model):
     def __str__(self):
         return self.team_name
 
-
-class Player(models.Model):
-    
-    team_name = models.CharField(max_length=200)
-
     def make_player_table(self):
         
+        key = self.team_name
         results = []
 
         def find_stats(results):
-            key = self.team_name
+            key = Team
             temp = {}
             for player in results:
-                print(player)
                 if results[player]['team'] == key:
                     temp[player] = results[player]
             return temp
