@@ -17,23 +17,19 @@ class Player(models.Model):
         
         results = []
 
-        def find_stats(table):
+        def find_stats(results):
             key = self.team_name
             temp = {}
-            for player in table:
+            for player in results:
                 print(player)
-                for player_name in player:
-                    print(player_name)
-                    if player[player_name]['team'] == key:
-                        temp[player] = player[player_name]
+                if results[player]['team'] == key:
+                    temp[player] = results[player]
             return temp
 
-        dicts_from_file = []
-        with open('data.txt','r') as inf:
-            for line in inf:
-                dicts_from_file.append(eval(line))  
+        from data import dict
+        results = dict
 
-        roster = find_stats(dict_from_file)
+        roster = find_stats(results)
         
         return roster
 
