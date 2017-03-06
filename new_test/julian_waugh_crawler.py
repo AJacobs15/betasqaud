@@ -495,7 +495,20 @@ def create_csv(dictionary):
                 stat = str(stats)
                 writer = csv.writer(csvfile4, delimiter='|')
                 writer.writerow([p_id, player, t_id, team, stat])   
-
+    with open("pure_stats.csv", 'w') as csvfile5:
+        p = 40
+        for team in dictionary.keys():
+            for x in dictionary[team]:
+                stats = x[1]
+                player = x[0]
+                p += 1
+                stat_num = 0
+                stat = str(stats)
+                for x in stats:
+                    stat = str(x)
+                    writer = csv.writer(csvfile5, delimiter='|')
+                    writer.writerow([player, stat_num, stat]) 
+                    stat_num += 1
 
 
 def test(d):
