@@ -7,6 +7,7 @@ import sys
 import csv
 import scraping
 import numpy as np
+import json
 
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
@@ -600,3 +601,34 @@ def build_team_stats_dictionary(league_dictionary):
 
     return team_dictionary
     
+
+
+def write_to_JSON(filename):
+    '''
+    We need to store the data in a JSON for the website.
+    Although the combination of dictionary and tuples works nicely for 
+    the tasks we need to preform with pandas, I will convert this data into a dictionary.
+    '''
+
+
+    return_dict = crawl(100, starting_url, limiting_domain)
+
+    player_index = 0
+    stats_index = 1
+
+    rv ={}
+    for team_name, team_stats in return_dict.items():
+        for player_tupl in team_stats:
+            player_name = player_tupl[player_index]
+            player_stats = player_tupl[stats_index]
+
+            rv[player_name] = {}
+            rv[player_name]['TEAM'] = team_name
+            rv[player_name]['STATS'] = player_stats
+
+    with open(filename, 'w') as fp:
+        json.dump(rv, fp)
+
+
+
+
