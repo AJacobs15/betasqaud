@@ -1,7 +1,7 @@
 {% if team_list %}
     <ul>
     {% for team in team_list %}
-        <li><a href="/stats/{{ team.team_name }}/">{{ team.team_name }}</a></li>
+        <li><a href="/stats/{{ team.id }}/">{{ team.team_name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

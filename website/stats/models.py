@@ -13,11 +13,11 @@ class Team(models.Model):
         results = []
 
         def find_stats(results):
-            key = Team
-            temp = {}
+            key = self.team_name
+            temp = []
             for player in results:
                 if results[player]['team'] == key:
-                    temp[player] = results[player]
+                    temp.append((player,results[player]))
             return temp
 
         from data import dict
