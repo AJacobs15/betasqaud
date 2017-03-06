@@ -1,6 +1,4 @@
-from django.http import Http404
-
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404,render
 
 from .models import Team
 
@@ -13,9 +11,6 @@ def index(request):
     return render(request, 'stats/index.html', context)
 
 
-def detail(request, team_name):
-    try:
-        roster = Question.objects.get(pk=team_name)
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'polls/detail.html', {'roster': roster})
+def detail(request, team_id):
+    team = get_object_or_404(Team, pk=team_id)
+    return render(request, 'stats/detail.html', {'team':team})

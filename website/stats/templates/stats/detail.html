@@ -1,6 +1,6 @@
-<h1>{{ roster }}</h1>
+<h1>{{ team }}</h1>
 <ul>
-{% for player in roster %}
-    <li>{{ player }}</li>
+{% for player in team.make_player_table %}
+    <li> {{player}} </li>
 {% endfor %}
 </ul>
