@@ -271,30 +271,68 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
     centroid_vector = [round(x, 2) for x in centroid_vector]
     player_vector = list(player_vector)[0] 
 
+    centroid_percents = centroid_vector[:3]
+    player_percents = player_vector[:3]
 
-    print(centroid_vector)
-    print(player_vector)
+    centroid_flat = centroid_vector[3:]
+    player_flat = player_vector[3:]
+
+
+    #print(type(centroid_percents), type(player_percents), type(centroid_flat), type(player_flat))
+
+
+    #print(centroid_vector)
+    #print(player_vector)
     n_groups = len(centroid_vector)
 
 
     fig, ax = plt.subplots()
 
     plt.clf()
+    ax1 =fig.add_subplot(211)
+
+    index = np.arange(len(centroid_flat))
+    bar_width = 0.35
+    opacity = 0.7
+    error_config = {'ecolor': '0.3'}
+    rects1 = plt.bar(index, centroid_flat, bar_width,
+                     alpha=opacity,
+                     color='k',
+                     error_kw=error_config,
+                     label='Generic ' + position)
+
+    rects2 = plt.bar(index + bar_width, player_flat, bar_width,
+                     alpha=opacity,
+                     color='r',
+                     error_kw=error_config,
+                     label= player_name)
+
+    plt.xlabel('Categories')
+    plt.ylabel('stats')
+    plt.title('Comparison of Player to Average Hard stats\n'
+                'Position = ' + position)
+    plt.xticks(index + bar_width / 2, ('RPG', 'APG', 'SPG', 'BPG', 'PPG'))
+    plt.legend(loc= 0)
+    plt.tight_layout()
 
 
-    index = np.arange(n_groups)
+
+
+    ax2 =fig.add_subplot(212)
+
+    index = np.arange(len(player_percents))
     bar_width = 0.35
 
     opacity = 0.7
     error_config = {'ecolor': '0.3'}
 
-    rects1 = plt.bar(index, centroid_vector, bar_width,
+    rects1 = plt.bar(index, centroid_percents, bar_width,
                      alpha=opacity,
                      color='k',
                      error_kw=error_config,
                      label='Centroid')
 
-    rects2 = plt.bar(index + bar_width, player_vector, bar_width,
+    rects2 = plt.bar(index + bar_width, player_percents, bar_width,
                      alpha=opacity,
                      color='r',
                      error_kw=error_config,
@@ -305,12 +343,16 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
 
 
 
-    plt.title('Comparison of Player to Average stats\n'
+    plt.title('Comparison of Player to Average Percentage stats\n'
                 'Position = ' + position)
-    plt.xticks(index + bar_width / 2, ('3P%', 'FG%', 'FT%', 'RPG', 'APG', 'SPG', 'BPG', 'PPG'))
-    plt.legend(loc= 'upper left')
+    plt.xticks(index + bar_width / 2, ('3P%', 'FG%', 'FT%'))
+    #plt.legend(loc= 0)
 
     plt.tight_layout()
+    
+
+
+
     plt.show()
 
 
