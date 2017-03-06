@@ -74,6 +74,7 @@ def create_general_plot(data, n_positions):
     kmeans = KMeans(init='k-means++', n_clusters=n_positions, n_init=10)
     kmeans.fit(reduced_data)
     print(kmeans.cluster_centers_)
+    print()
 
         # Step size of the mesh. Decrease to increase the quality of the VQ.
     h = .02     # point in the mesh [x_min, x_max]x[y_min, y_max].
@@ -87,11 +88,11 @@ def create_general_plot(data, n_positions):
     Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
 
 
-    print('we have a result and now need to plot it')
+    #print('we have a result and now need to plot it')
     # Put the result into a color plot
     Z = Z.reshape(xx.shape)
 
-    print(Z)
+    #print(Z)
 
     
     fig = plt.figure()
@@ -104,6 +105,12 @@ def create_general_plot(data, n_positions):
     plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=2)
     # Plot the centroids as a white X
     centroids = kmeans.cluster_centers_
+    print(type(centroids))
+    print(centroids[:, 0])
+    print()
+    print()
+    print(centroids[:, 1])
+
     plt.scatter(centroids[:, 0], centroids[:, 1],
                 marker='x', s=169, linewidths=3,
                 color='w', zorder=10)
@@ -201,7 +208,7 @@ def create_testing_data_arthur(data):
 
         print(a , b , c)'''
 
-        new_vector = vector[:2] + [vector[three_pt_index]] + [vector[free_throw_index]] + [vector[field_goal_index]] + vector[-5:]
+        new_vector = [vector[three_pt_index]] + [vector[free_throw_index]] + [vector[field_goal_index]] + vector[-5:]
         rv.append(new_vector)
 
     return rv
@@ -210,12 +217,18 @@ def make_centroids(data):
 
     kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
     kmeans.fit(reduced_data)
-    print(kmeans.cluster_centers_)   
+
+
+    return kmeans.cluster_centers_ 
 
 
 
-
-
+def cluster_centers_d_2(data):
+    reduced_data = PCA(n_components=2).fit_transform(data)
+    kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10)
+    kmeans.fit(reduced_data)
+    print(kmeans.cluster_centers_)
+    print()
 
 
 def compare_player_to_centroid(centroid_vector, player_vector):
