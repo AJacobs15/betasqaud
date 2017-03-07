@@ -14,3 +14,4 @@ def index(request):
 def detail(request, team_id):
     team = get_object_or_404(Team, pk=team_id)
     return render(request, 'stats/detail.html', {'team':team})
+
