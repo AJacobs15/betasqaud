@@ -16,15 +16,16 @@ class Team(models.Model):
             key = self.team_name
             temp = []
             for player in results:
-                if results[player]['team'] == key:
-                    temp.append((player,results[player]))
+                if results[player]['TEAM'] == key:
+                    temp.append((player, results[player]['STATS']))
             return temp
 
-        from data import dict
-        results = dict
+        import json
 
-        roster = find_stats(results)
+        with open('data_dump.json') as data_file:    
+            data = json.load(data_file)
+
+        roster = find_stats(data)
         
         return roster
 
-    
