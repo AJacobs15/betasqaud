@@ -421,8 +421,9 @@ class Cluster_DF(object):
         league_df['vector'] = pd.Series(stat_matrix, index = league_df.index)
         league_df['position'] = pd.Series(positions, index = league_df.index)
 
-        self.df = league_df
+        
 
+        self.df = league_df
         self.centroids = kmeans.cluster_centers_
 
         self.map = make_position_map(centroid_array)
