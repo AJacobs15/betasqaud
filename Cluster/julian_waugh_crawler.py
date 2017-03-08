@@ -359,14 +359,14 @@ def clean_return_dict(roster_dict, return_dict):
     gets rid of all of the weird categories in the return dictionary from the crawler.
     Additionally, updates names.
     '''
-    del return_dict["Scoring Per"]
-    return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
+    del return_dict["nba stats leaders"]
+    ''''return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
     return_dict['Golden State Warriors'] = return_dict.pop('Golden State')
     return_dict['New York Knicks'] = return_dict.pop('New York')
     return_dict['Oklahoma City Thunder'] = return_dict.pop('Oklahoma City')
     return_dict['San Antonio Spurs'] = return_dict.pop('San Antonio')
     return_dict['Portland Trail Blazers'] = return_dict.pop('Portland Trail')
-    return_dict['New Orleans Pelicans'] = return_dict.pop('New Orleans')
+    return_dict['New Orleans Pelicans'] = return_dict.pop('New Orleans')'''
 
     '''for team, stat_list in return_dict.items():
 
