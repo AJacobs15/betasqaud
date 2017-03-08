@@ -41,7 +41,7 @@ def test_df():
     
     return league, teams
 
-league, teams = test_df()
+#league, teams = test_df()
 
 
 def trade(team_a, targets):
@@ -157,27 +157,3 @@ def find_dataframe(first_dict):
         new_team.loc[len(new_team)] = list_mean
     return new_team
 
-
-def values_from_django(django_dictionary):
-    '''
-    Takes the values from the django interface in the form of a dictionary. 
-    It's keys are the categories and the values of the minimums and maximums
-    are in the form of tuples. This returns the minimums and maximums in 
-    the form of two lists.
-    '''
-
-    categories = ['GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', \
-        '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG', \
-        'SPG', 'BPG', 'PPG']
-    minimums = []
-    maximums = []
-    for category in categories:    
-        for key in django_dictionary.keys:
-            if key == category:
-                value = django_dictionary[key]
-                minimum = value[0]
-                minimums.append(minimum)
-                maximum = value[1]
-                maximums.append(maximum)
-
-    return minimums, maximums
