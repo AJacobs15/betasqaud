@@ -1,4 +1,5 @@
 from sklearn import cluster
+from sklearn import preprocessing as pre
 import numpy as np
 
 
@@ -17,6 +18,20 @@ in terminal, run ' sudo pip3 install -U scikit-learn '
 use this link for the documentation
 
 '''
+
+
+def test_scale():
+    matrix = [[0,30], [1, 27], [3, 24]]
+
+    scaled = pre.scale(matrix)
+    print(scaled)
+
+def test_min_max_scale():
+    matrix = [[0,30], [1, 27], [3, 24]]
+    scaler = pre.MinMaxScaler()
+
+    rv = scaler.fit_transform(matrix)
+    print(rv)
 
 
 
@@ -47,6 +62,9 @@ def find_cluster(centroid_matrix, in_vector):
 
 
     Returns storage, the nearest centroid vector to the in_vector.
+
+
+    WE DONT NEED THIS BECAUSE OF THE CLUSTER METHODS!!!
     '''
     maximum = -1
     storage = None

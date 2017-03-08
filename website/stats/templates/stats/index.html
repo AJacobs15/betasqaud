@@ -1,0 +1,9 @@
+{% if team_list %}
+    <ul>
+    {% for team in team_list %}
+        <li><a href="/stats/{{ team.id }}/">{{ team.team_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No teams available.</p>
+{% endif %}

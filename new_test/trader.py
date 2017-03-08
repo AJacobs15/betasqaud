@@ -18,9 +18,6 @@ limiting_path = "/nba/teams"
 def test_df():
     first_dict = C.crawl(100, starting_url, limiting_domain)
     final_dict = C.build_team_stats_dictionary(first_dict)
-    suns = first_dict['Phoenix Suns']
-
-    sixers = first_dict['Philadelphia Sixers']
     team_names = list(first_dict.keys())
     teams = []
 
@@ -41,11 +38,10 @@ def test_df():
         teams.append(team)
     league = pd.concat(teams)
 
-    print(type(teams))
     
     return league, teams
 
-league, teams = test_df()
+#league, teams = test_df()
 
 
 def trade(team_a, targets):
@@ -60,8 +56,44 @@ def trade(team_a, targets):
             agents.append((player_score(targets.iloc[i], team_a), targets.iloc[i]))
         agents.sort
 
+        rank = 1
+        print("Top Trade Targets")
+        for player in agents:
+            print(rank, player[1].loc["PLAYER"])
+            feasibility(team_a, player[1])
+            rank += 1
+
+
         return agents
 
+def feasibility(team_a, target):
+
+    team = []
+    for i in range(len(team_a)):
+        player = team_a.iloc[i]
+        team.append((abs(stat_vector(target) - stat_vector(player)), player))
+    team.sort()
+
+    print("Likely trade chips for", target.loc["PLAYER"])
+    rank = 1
+
+    for tup in team:
+        print(rank, tup[1].loc["PLAYER"])
+        rank += 1
+
+    return team
+
+
+def stat_vector(player):
+
+    stats = ['3P%', 'FG%', 'FT%','RPG', 'APG', 'SPG', 'BPG', 'PPG']
+    vector = 0
+
+    for stat in stats:
+        l_avg = league[stat].mean()
+        vector += (player.loc[stat] / l_avg)
+
+    return vector
 
 
 def player_score(player, team):

@@ -22,8 +22,8 @@ def selection(original_file, stat, minimum, maximum):
     with the players that fall within this range.
     '''
     category = original_file[stat]
-    original_file = original_file.loc[category > minimum]
-    original_file = original_file.loc[category < maximum]
+    original_file = original_file.loc[category >= minimum]
+    original_file = original_file.loc[category <= maximum]
 
     return original_file
 
@@ -71,9 +71,9 @@ def test1(filename=original_file):
     return players
 
 def test2(filename=original_file):
-    categories = ["GS", 'FGA', 'FTM']
-    minimums = [24, 1, 2]
-    maximums = [59, 17, 3]
+    categories = ["GS"]
+    minimums = [67]
+    maximums = [34]
 
     players = ideal_players(filename, categories, minimums, maximums)
 
