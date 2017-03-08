@@ -352,8 +352,9 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
     
 
 
+    fig.savefig('plot.pdf') 
 
-    plt.show()
+    #plt.show()
 
 
 def test_plot():
