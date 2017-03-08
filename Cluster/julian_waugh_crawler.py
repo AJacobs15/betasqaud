@@ -647,3 +647,19 @@ def build_team_stats_dictionary(league_dictionary):
         team_dictionary[team_name] = avg
 
     return team_dictionary
+
+
+
+def write_to_JSON(filename):
+    '''
+    We need to store the data in a JSON for the website.
+    Although the combination of dictionary and tuples works nicely for 
+    the tasks we need to preform with pandas, I will convert this data into a dictionary.
+    '''
+
+
+    return_dict, roster_dict = crawl(100, starting_url, limiting_domain)
+
+    
+    with open(filename, 'w') as fp:
+        json.dump(roster_dict, fp)
