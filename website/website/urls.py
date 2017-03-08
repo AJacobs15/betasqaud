@@ -20,5 +20,6 @@ from home import views
 urlpatterns = [
     url(r'^$', include('home.urls')),
     url(r'^stats/', include('stats.urls')),
+    url(r'^trade/', include('trade.urls')),
     url(r'^admin/', admin.site.urls),
 ]
