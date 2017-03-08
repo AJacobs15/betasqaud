@@ -106,10 +106,10 @@ class GM(object):
     def trade(self):
 
         #run the trade. It will print out values as it goes.
-        agents = trader.trade(self.team_df, self.constrained_league)
+        agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF)
         print(agents)
 
-        target_player = agents[0]
+        target_player = str(agents[0][1]['PLAYER'])
 
         #get position
 
@@ -119,9 +119,9 @@ class GM(object):
         #make a visual file
         clusters.plot(target_player)
 
-        link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK']
+        link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK'].to_string().split()[1]
 
-        data_string, img_links, award_list = C.get_individual_player_data(link, limiting_domain)
+        data_string, img_links, award_list = C.get_individual_player_data(link, limiting_domain, True)
 
         if ((data_string == None) and (img_links == None) and (award_list == None)):
             print('the player is currently injured')

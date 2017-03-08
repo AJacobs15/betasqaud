@@ -51,34 +51,34 @@ def test_df(roster_dict = None, first_dict = None, switch = True):
 #league, teams = test_df()
 
 
-def trade(team_a, targets):
+def trade(team_a, targets, league):
         percents = ['3P%', 'FG%', 'FT%']
         flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
         team_score = 0
         for i in range(len(team_a)):
             player = team_a.iloc[i]
-            team_score += player_score(player, team_a)
+            team_score += player_score(player, team_a, league)
         agents = []
         for i in range(len(targets)):
-            agents.append((player_score(targets.iloc[i], team_a), targets.iloc[i]))
+            agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
         agents.sort
 
         rank = 1
         print("Top Trade Targets")
         for player in agents:
             print(rank, player[1].loc["PLAYER"])
-            feasibility(team_a, player[1])
+            feasibility(team_a, player[1], league)
             rank += 1
 
 
-        return None #return agents
+        return agents #return agents
 
-def feasibility(team_a, target):
+def feasibility(team_a, target, league):
 
     team = []
     for i in range(len(team_a)):
         player = team_a.iloc[i]
-        team.append((abs(stat_vector(target) - stat_vector(player)), player))
+        team.append((abs(stat_vector(target, league) - stat_vector(player, league)), player))
     team.sort()
 
     print("Likely trade chips for", target.loc["PLAYER"])
@@ -91,7 +91,7 @@ def feasibility(team_a, target):
     return team
 
 
-def stat_vector(player):
+def stat_vector(player, league):
 
     stats = ['3P%', 'FG%', 'FT%','RPG', 'APG', 'SPG', 'BPG', 'PPG']
     vector = 0
@@ -103,7 +103,7 @@ def stat_vector(player):
     return vector
 
 
-def player_score(player, team):
+def player_score(player, team , league):
     percents = ['3P%', 'FG%', 'FT%']
     flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
     total = 0

@@ -208,8 +208,11 @@ def get_individual_player_data(player_link, limiting_domain):
 
     proper_url, soup = make_soup(player_link, limiting_domain, player_switch = True)
 
+    print(soup)
+
     #turn back to original when submitting
     tags = soup.find_all('div', class_ = 'profile-box') #check if reading the request failed
+    print(tags)
 
     if tags != []:
     #print(soup)
