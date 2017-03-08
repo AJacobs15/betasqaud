@@ -17,14 +17,9 @@ limiting_path = "/nba/teams"
 
 def test_df():
     first_dict, roster_dict = C.crawl(100, starting_url, limiting_domain)
-    
-    return first_dict, roster_dict
-
-def df(first_dict, roster_dict):
-
     team_names = list(first_dict.keys())
     teams = []
-    league = {}
+    rosters = {}
 
     for teamname in team_names:
         team = first_dict[teamname]
@@ -41,21 +36,18 @@ def df(first_dict, roster_dict):
             link.append(roster_dict[teamname][player[0]])
             combined = tuple(name + stats + link)
             roster.append(combined)
+
         team = pd.DataFrame(roster, columns =['PLAYER', 'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', \
         '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG', \
         'SPG', 'BPG', 'PPG', 'LINK'])
         teams.append(team)
+        rosters[teamname] = team
     league = pd.concat(teams)
 
     
-    return league, teams
-def test():
-    first_dict, roster_dict = C.crawl(100, starting_url, limiting_domain)
+    return league, rosters
 
-    return roster_dict
-
-
-#league, teams = test_df()
+league, teams = test_df()
 
 
 def trade(team_a, targets):
@@ -78,7 +70,7 @@ def trade(team_a, targets):
             rank += 1
 
 
-        return agents
+        return None #return agents
 
 def feasibility(team_a, target):
 
