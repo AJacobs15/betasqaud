@@ -41,7 +41,7 @@ def test_df():
     
     return league, teams
 
-league, teams = test_df()
+#league, teams = test_df()
 
 
 def trade(team_a, targets):
