@@ -439,7 +439,7 @@ def eliminate_multiplicity(roster_dict, return_dict):
     and roster_dict, a dictionary describing the accurate rosters of the entire league,
     returns a an updated league_statistic dictionary without any multiplicity.
     '''
-    multiplicity_dict = search_for_multiplicity(return_dict)
+    '''multiplicity_dict = search_for_multiplicity(return_dict)
 
     players_to_elimate = {}
     
@@ -451,17 +451,39 @@ def eliminate_multiplicity(roster_dict, return_dict):
                 else:
                     players_to_elimate[team].add(player)
     
-
     for team in players_to_elimate:
         wrong_players = players_to_elimate[team]
         roster = return_dict[team]
 
         new_team = []
+        #print(team)
         for data_tupl in roster:
-            player = data_tupl[0]
+            #print('Trump train')
+            player = str(data_tupl[0])
+
+            #if team == "San Antonio Spurs":
+                #print(roster)
             if player not in wrong_players:
                 new_team.append(data_tupl)
-        return_dict[team] = new_team
+        return_dict[team] = new_team'''
+
+
+    #The previous code gets rid of people who were traded. Now, I get rid of people who were waived:
+
+    for team, team_stats in return_dict.items():
+        new_stats = []
+
+        for player_tupl in team_stats:
+            player = player_tupl[0]
+            stats = player_tupl[1]
+
+            if player in roster_dict[team]:
+                new_stats.append((player, stats))
+
+        return_dict[team] = new_stats
+
+
+
 
     return return_dict
 
