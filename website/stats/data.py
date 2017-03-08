@@ -1,1 +1,0 @@
-dict = {'Steph Curry':{'team':'Golden State Warriors'},'Isaiah Thomas':{'team':'Boston Celtics'},'Jimmy Butler':{'team':'Chicago Bulls'}}
