@@ -15,33 +15,39 @@ limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams" 
 
-def test_df():
-    first_dict, return_dict  = C.crawl(100, starting_url, limiting_domain)
-    final_dict = C.build_team_stats_dictionary(first_dict)
+def test_df():    
+    first_dict, roster_dict = C.crawl(100, starting_url, limiting_domain)
     team_names = list(first_dict.keys())
     teams = []
+    rosters = {}
 
-    for team in team_names:
-        team = first_dict[team]
+    for teamname in team_names:
+        team = first_dict[teamname]
         roster = []
         for player in team:
             name = []
             stats = []
+            link = []
             name.append(player[0])
             for stat in player[1]:
                 stats.append(stat)
-            combined = tuple(name + stats)
+            print("team", teamname)
+            print("player", player[0])
+            link.append(roster_dict[teamname][player[0]])
+            combined = tuple(name + stats + link)
             roster.append(combined)
+
         team = pd.DataFrame(roster, columns =['PLAYER', 'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', \
         '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG', \
-        'SPG', 'BPG', 'PPG'])
+        'SPG', 'BPG', 'PPG', 'LINK'])
         teams.append(team)
+        rosters[teamname] = team
     league = pd.concat(teams)
 
     
-    return league, teams
+    return league, rosters
 
-#league, teams = test_df()
+league, teams = test_df()
 
 
 def trade(team_a, targets):
@@ -64,7 +70,7 @@ def trade(team_a, targets):
             rank += 1
 
 
-        return agents
+        return None #return agents
 
 def feasibility(team_a, target):
 
