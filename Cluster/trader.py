@@ -16,7 +16,7 @@ starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams" 
 
 def test_df():
-    first_dict = C.crawl(100, starting_url, limiting_domain)
+    first_dict, return_dict  = C.crawl(100, starting_url, limiting_domain)
     final_dict = C.build_team_stats_dictionary(first_dict)
     team_names = list(first_dict.keys())
     teams = []
