@@ -11,6 +11,7 @@ import pandas as pd
 
 
 original_file = pd.read_csv("pure_stats.csv", delimiter='|')
+print(original_file)
 original_file.columns = ['player', 'stat_num', 'stat']
 original_file = original_file.pivot_table(index='player', columns='stat_num', values='stat')
 original_file = original_file.fillna(value = 61.0)
