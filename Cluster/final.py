@@ -68,7 +68,8 @@ Again, we print everything. However, this information can easily be returned in 
 '''
 
 
-
+TEAM_DICT = None
+LEAGUE_DF = None
 
 
 #use arthur's code to make your data bases etc; make a league dataframe call it LEAGUE_DF, TEAM_DICT
