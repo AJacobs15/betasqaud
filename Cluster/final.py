@@ -2,6 +2,7 @@ import pandas as pd
 import julian_waugh_crawler as C
 import trader
 import selections
+import represent
 
 
 limiting_domain = "basketball.realgm.com"
@@ -67,9 +68,7 @@ Again, we print everything. However, this information can easily be returned in 
 
 '''
 
-
-TEAM_DICT = None
-LEAGUE_DF = None
+LEAGUE_DF, TEAM_DICT = trader.test_df(switch=False)
 
 
 #use arthur's code to make your data bases etc; make a league dataframe call it LEAGUE_DF, TEAM_DICT
@@ -94,11 +93,13 @@ class GM(object):
     def __init__(self, team, constraints):
         categories = constraints[CATEGORY_INDEX]
         minimums = constraints[MINIMUMS_INDEX]
-        maximums = contraints[MAXIMUMS_INDEX]
+        maximums = constraints[MAXIMUMS_INDEX]
 
 
         #apply the constraints
-        self.contrained_league = selections.ideal_players(LEAGUE_DF, categories, minimums, maximums)
+        constrained_league = selections.ideal_players(LEAGUE_DF, categories, minimums, maximums)
+
+        self.constrained_league = constrained_league
 
         self.team_df = TEAM_DICT[team]
 

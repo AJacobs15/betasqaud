@@ -16,7 +16,7 @@ def suggestions(request):
     for team in teams:
         team_list.append(team)
     team_traded = request.POST['Team']
-    that_team = Team(team_name=team_traded)
+    that_team = get_object_or_404(Team, pk=team_traded)
     possible_players = []
     stats = []
     stats.append((request.POST['GPmin'],request.POST['GPmax']))
