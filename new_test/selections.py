@@ -8,13 +8,17 @@ import csv
 import scraping
 import numpy as np
 import pandas as pd
+import trader as t
+
+league, teams = t.test_df()
 
 
 original_file = pd.read_csv("pure_stats.csv", delimiter='|')
+print(original_file)
 original_file.columns = ['player', 'stat_num', 'stat']
 original_file = original_file.pivot_table(index='player', columns='stat_num', values='stat')
 original_file = original_file.fillna(value = 61.0)
-original_file.columns = ['GS','Min', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'OFF', 'DEF', 'TRB', 'AST', 'STL', 'BLK', 'PF', 'TOV', 'PTS']
+original_file.columns = ['GP','Min', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'OFF', 'DEF', 'TRB', 'AST', 'STL', 'BLK', 'PF', 'TOV', 'PTS']
 
 def selection(original_file, stat, minimum, maximum):
     '''
@@ -22,12 +26,12 @@ def selection(original_file, stat, minimum, maximum):
     with the players that fall within this range.
     '''
     category = original_file[stat]
-    original_file = original_file.loc[category > minimum]
-    original_file = original_file.loc[category < maximum]
+    original_file = original_file.loc[category >= minimum]
+    original_file = original_file.loc[category <= maximum]
 
     return original_file
 
-def ideal_players(original_file, categories, minimums, maximums):
+def ideal_players(league, categories, minimums, maximums):
     '''
     Takes in the users preferences for certain categories, returns a list
     of players that match all their preferences.
@@ -35,7 +39,7 @@ def ideal_players(original_file, categories, minimums, maximums):
     for stat in categories:
         minimum = minimums[0]
         maximum = maximums[0]
-        original_file = selection(original_file, stat, minimum, maximum)
+        original_file = selection(league, stat, minimum, maximum)
         maximums = maximums[1:]
         minimums = minimums[1:]
     
@@ -62,8 +66,8 @@ def just_players(original_file):
     return players
 
 
-def test1(filename=original_file):
-    categories = ["GS", 'FGA', 'FTM']
+def test1(filename=league):
+    categories = ["GP", 'FGA', 'FTM']
     minimums = [50, 13, 2]
     maximums = [59, 17, 5]
     players = ideal_players(filename, categories, minimums, maximums)
@@ -71,9 +75,9 @@ def test1(filename=original_file):
     return players
 
 def test2(filename=original_file):
-    categories = ["GS", 'FGA', 'FTM']
-    minimums = [24, 1, 2]
-    maximums = [59, 17, 3]
+    categories = ["GS"]
+    minimums = [67]
+    maximums = [34]
 
     players = ideal_players(filename, categories, minimums, maximums)
 
