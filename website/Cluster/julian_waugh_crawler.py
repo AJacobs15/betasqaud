@@ -341,7 +341,7 @@ def roster_dict_to_player_info(roster_dict, limiting_domain):
     for team, player_dict in roster_dict.items():
         for player, player_link in player_dict.items():
             #print(player, player_link)
-            print(player)
+            #print(player)
             data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
             updated[player] = {}
             updated[player]['bio'] = data_string
@@ -662,7 +662,7 @@ def write_to_JSON(filename):
 
 
     return_dict, roster_dict = crawl(100, starting_url, limiting_domain)
-
+    u = roster_dict_to_player_info(roster_dict, limiting_domain)
     
     with open(filename, 'w') as fp:
-        json.dump(roster_dict, fp)
+        json.dump(u, fp)
