@@ -3,6 +3,7 @@ import julian_waugh_crawler as C
 import trader
 import selections
 import represent
+import json
 
 
 limiting_domain = "basketball.realgm.com"
@@ -67,8 +68,15 @@ This will do the following things: (note that at this point, I print everything 
 Again, we print everything. However, this information can easily be returned in whatever form you want. Let me know. 
 
 '''
+with open('return_dict.json') as data_file:    
+        return_dict = json.load(data_file)
 
-LEAGUE_DF, TEAM_DICT = trader.test_df(switch=False)
+with open('roster_dict.json') as data_file:    
+        roster_dict = json.load(data_file)
+
+
+
+LEAGUE_DF, TEAM_DICT = trader.test_df(roster_dict, return_dict, switch=True)
 
 
 #use arthur's code to make your data bases etc; make a league dataframe call it LEAGUE_DF, TEAM_DICT
@@ -108,17 +116,17 @@ class GM(object):
         #run the trade. It will print out values as it goes.
         agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF)
         #print(agents)
+        best = agents[0]
 
-        target_player = agents[0][1]['PLAYER']
+        for trade in best:
+            print(trade)
+        #target_player = agents[0][1]['PLAYER']
 
         #get position
 
-        position = clusters.player_to_position(target_player)
-        #print(position)
+        #position = clusters.player_to_position(target_player)
 
-       
-
-        return target_player, position
+        #return target_player, position
 
         #make a visual file
         '''clusters.plot(target_player)

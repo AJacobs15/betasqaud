@@ -8,6 +8,7 @@ import csv
 import scraping
 import numpy as np
 
+
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
@@ -208,11 +209,11 @@ def get_individual_player_data(player_link, limiting_domain):
 
     proper_url, soup = make_soup(player_link, limiting_domain, player_switch = True)
 
-    print(soup)
+    #print(soup)
 
     #turn back to original when submitting
     tags = soup.find_all('div', class_ = 'profile-box') #check if reading the request failed
-    print(tags)
+    #print(tags)
 
     if tags != []:
     #print(soup)
@@ -662,7 +663,20 @@ def write_to_JSON(filename):
 
 
     return_dict, roster_dict = crawl(100, starting_url, limiting_domain)
-
+    #u = roster_dict_to_player_info(roster_dict, limiting_domain)
     
     with open(filename, 'w') as fp:
         json.dump(roster_dict, fp)
+
+
+
+
+def view_data(filename):
+    with open(filename) as data_file:    
+        data = json.load(data_file)
+
+    cnt = 0
+    for k, v in data.items():
+        print(k)
+        cnt += 1
+    print(cnt)
