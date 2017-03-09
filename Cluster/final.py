@@ -2,6 +2,7 @@ import pandas as pd
 import julian_waugh_crawler as C
 import trader
 import selections
+import represent
 
 
 limiting_domain = "basketball.realgm.com"
@@ -67,9 +68,7 @@ Again, we print everything. However, this information can easily be returned in 
 
 '''
 
-
-TEAM_DICT = None
-LEAGUE_DF = None
+LEAGUE_DF, TEAM_DICT = trader.test_df(switch=False)
 
 
 #use arthur's code to make your data bases etc; make a league dataframe call it LEAGUE_DF, TEAM_DICT
@@ -94,31 +93,37 @@ class GM(object):
     def __init__(self, team, constraints):
         categories = constraints[CATEGORY_INDEX]
         minimums = constraints[MINIMUMS_INDEX]
-        maximums = contraints[MAXIMUMS_INDEX]
+        maximums = constraints[MAXIMUMS_INDEX]
 
 
         #apply the constraints
-        self.contrained_league = selections.ideal_players(LEAGUE_DF, categories, minimums, maximums)
+        constrained_league = selections.ideal_players(LEAGUE_DF, categories, minimums, maximums)
+
+        self.constrained_league = constrained_league
 
         self.team_df = TEAM_DICT[team]
 
     def trade(self):
 
         #run the trade. It will print out values as it goes.
-        agents = trader.trade(self.team_df, self.constrained_league)
-        print(agents)
+        agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF)
+        #print(agents)
 
-        target_player = agents[0]
+        target_player = agents[0][1]['PLAYER']
 
         #get position
 
         position = clusters.player_to_position(target_player)
-        print(position)
+        #print(position)
+
+       
+
+        return target_player, position
 
         #make a visual file
-        clusters.plot(target_player)
+        '''clusters.plot(target_player)
 
-        link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK']
+        link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK'].to_string().split()[1]
 
         data_string, img_links, award_list = C.get_individual_player_data(link, limiting_domain)
 
@@ -127,7 +132,7 @@ class GM(object):
 
         print(data_string)
         print(img_links)
-        print(award_list)
+        print(award_list)'''
 
 
 def get_player(target_list, LEAGUE_DF):
