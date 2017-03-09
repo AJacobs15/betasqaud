@@ -64,14 +64,19 @@ def trade(team_a, targets, league):
         agents.sort
 
         rank = 1
-        print("Top Trade Targets")
+        Top_Trade_Targets = []
         for player in agents:
-            print(rank, player[1].loc["PLAYER"])
-            feasibility(team_a, player[1], league)
+            trade_chips = []
+            trade_chips.append(rank)
+            trade_chips.append(player[1].loc["PLAYER"])
+            chips = feasibility(team_a, player[1], league)
+            for chip in chips:
+                trade_chips.append(chip)
+            Top_Trade_Targets.append(trade_chips)
             rank += 1
 
-
-        return agents #return agents
+    
+        return Top_Trade_Targets #return agents
 
 def feasibility(team_a, target, league):
 
@@ -81,14 +86,15 @@ def feasibility(team_a, target, league):
         team.append((abs(stat_vector(target, league) - stat_vector(player, league)), player))
     team.sort()
 
-    print("Likely trade chips for", target.loc["PLAYER"])
+    #print("Likely trade chips for", target.loc["PLAYER"])
     rank = 1
-
+    final_team = []
     for tup in team:
-        print(rank, tup[1].loc["PLAYER"])
+        final_team.append(rank)
+        final_team.append(tup[1].loc["PLAYER"])
+        #print(rank, tup[1].loc["PLAYER"])
         rank += 1
-
-    return team
+    return final_team
 
 
 def stat_vector(player, league):
