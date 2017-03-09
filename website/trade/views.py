@@ -63,7 +63,6 @@ def suggestions(request):
     max_stats.append(float(request.POST['PPGmax']))
     categories = ['GP','MPG','FGM','FGA','FG%','3PM','3PA','3P%','FTM','FTA','FT%','TOV','PF','OFR','DFR','RPG','APG','SPG','BPG','PPG']
     Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
-    possible_players, temps = Trading.trader()
-    retur_string = possible_players+': '+temps
+    possible_players = Trading.trader()
 
-    return render(request, 'trade/results.html', {'retur_string': retur_string})
+    return render(request, 'trade/results.html', {'possible_players': possible_players})
