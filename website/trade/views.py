@@ -16,7 +16,7 @@ def suggestions(request):
     team_list = []
     for team in teams:
         team_list.append(team)
-    team_traded = request.POST['TEAM']
+    team_traded = request.POST['team_do_thing']
     that_team = get_object_or_404(Team, pk=team_traded)
     possible_players = []
     min_stats = []
@@ -64,5 +64,6 @@ def suggestions(request):
     categories = ['GP','MPG','FGM','FGA','FG%','3PM','3PA','3P%','FTM','FTA','FT%','TOV','PF','OFR','DFR','RPG','APG','SPG','BPG','PPG']
     Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
     possible_players, temps = Trading.trader()
+    retur_string = possible_players+': '+temps
 
-    return render(request, 'trade/results.html', {'possible_players': possible_players})
+    return render(request, 'trade/results.html', {'retur_string': retur_string})

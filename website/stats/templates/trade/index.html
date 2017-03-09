@@ -1,7 +1,7 @@
 <h1> Select Trades </h1>
 <form action="suggestions/" method="post">
 {% csrf_token %}
-  <select name="TEAM">
+  <select name="team_do_thing">
     <option selected="selected" disabled>Team Trading:</option>
     {% for team in team_list %}
         <option value={{ team.id }}>{{ team.team_name }}</option>
@@ -557,3 +557,5 @@
   <input type="submit" value="Select">
 </li>
 </form>
+
+<input type=button value="Previous Page" onClick="javascript:history.go(-1);">

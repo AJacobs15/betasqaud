@@ -116,17 +116,22 @@ class GM(object):
         #run the trade. It will print out values as it goes.
         agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF)
         #print(agents)
-        best = agents[0]
 
-        for trade in best:
-            print(trade)
-        #target_player = agents[0][1]['PLAYER']
+        target_players = []
+        if len(agents) >= 5:
+            for x in range(5):
+                target_players.append(agents[x][1]["PLAYER"])
+        else:
+            for x in range(len(agents)):
+                target_players.append(agents[x][1]["PLAYER"])
 
         #get position
 
         #position = clusters.player_to_position(target_player)
 
+
         #return target_player, position
+        return target_players
 
         #make a visual file
         '''clusters.plot(target_player)
