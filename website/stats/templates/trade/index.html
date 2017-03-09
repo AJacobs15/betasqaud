@@ -1,7 +1,7 @@
 <h1> Select Trades </h1>
 <form action="suggestions/" method="post">
 {% csrf_token %}
-  <select name="Team">
+  <select name="TEAM">
     <option selected="selected" disabled>Team Trading:</option>
     {% for team in team_list %}
         <option value={{ team.id }}>{{ team.team_name }}</option>
@@ -68,7 +68,7 @@
     <option value="45">45</option>
     <option value="40">40</option>
     <option value="35">35</option>
-    <option value="30">30%</option>
+    <option value="30">30</option>
     <option value="25">25</option>
     <option value="20">20</option>
     <option value="15">15</option>
@@ -180,24 +180,24 @@
    <p>Field Goals Percentage</p>
    <select name="FGmin">
     <option value="0">0</option>
-    <option value=".1">10%</option>
-    <option value=".2">20%</option>
-    <option value=".3">30%</option>
-    <option value=".4">40%</option>
-    <option value=".5">50%</option>
-    <option value=".6">60%</option>
-    <option value=".7">70%</option>
-    <option value=".8">80%</option>
+    <option value="0.1">10%</option>
+    <option value="0.2">20%</option>
+    <option value="0.3">30%</option>
+    <option value="0.4">40%</option>
+    <option value="0.5">50%</option>
+    <option value="0.6">60%</option>
+    <option value="0.7">70%</option>
+    <option value="0.8">80%</option>
   </select> 
   <select name="FGmax">
     <option value="1">100%</option>
-    <option value=".9">90%</option>
-    <option value=".8">80%</option>
-    <option value=".7">70%</option>
-    <option value=".6">60%</option>
-    <option value=".5">50%</option>
-    <option value=".4">40%</option>
-    <option value=".3">30%</option>
+    <option value="0.9">90%</option>
+    <option value="0.8">80%</option>
+    <option value="0.7">70%</option>
+    <option value="0.6">60%</option>
+    <option value="0.5">50%</option>
+    <option value="0.4">40%</option>
+    <option value="0.3">30%</option>
   </select>
 </li>
 <li>
@@ -246,24 +246,24 @@
    <p>3 Point Percentage</p>
    <select name="3Pmin">
     <option value="0">0</option>
-    <option value=".05">5%</option>
-    <option value=".1">10%</option>
-    <option value=".15">15%</option>
-    <option value=".2">20%</option>
-    <option value=".25">25%</option>
-    <option value=".3">30%</option>
-    <option value=".35">35%</option>
-    <option value=".4">40%</option>
+    <option value="0.05">5%</option>
+    <option value="0.1">10%</option>
+    <option value="0.15">15%</option>
+    <option value="0.2">20%</option>
+    <option value="0.25">25%</option>
+    <option value="0.3">30%</option>
+    <option value="0.35">35%</option>
+    <option value="0.4">40%</option>
   </select> 
   <select name="3Pmax">
-    <option value=".65">65%</option>
-    <option value=".6">60%</option>
-    <option value=".55">55%</option>
-    <option value=".5">50%</option>
-    <option value=".45">45%</option>
-    <option value=".4">40%</option>
-    <option value=".35">35%</option>
-    <option value=".3">30%</option>
+    <option value="0.65">65%</option>
+    <option value="0.6">60%</option>
+    <option value="0.55">55%</option>
+    <option value="0.5">50%</option>
+    <option value="0.45">45%</option>
+    <option value="0.4">40%</option>
+    <option value="0.35">35%</option>
+    <option value="0.3">30%</option>
   </select>
 </li>
 <li>
@@ -329,24 +329,24 @@
    <p>Free Throw Percentage</p>
    <select name="FTmin">
     <option value="0">0</option>
-    <option value=".1">10%</option>
-    <option value=".2">20%</option>
-    <option value=".3">30%</option>
-    <option value=".4">40%</option>
-    <option value=".5">50%</option>
-    <option value=".6">60%</option>
-    <option value=".7">70%</option>
-    <option value=".8">80%</option>
+    <option value="0.1">10%</option>
+    <option value="0.2">20%</option>
+    <option value="0.3">30%</option>
+    <option value="0.4">40%</option>
+    <option value="0.5">50%</option>
+    <option value="0.6">60%</option>
+    <option value="0.7">70%</option>
+    <option value="0.8">80%</option>
   </select> 
   <select name="FTmax">
     <option value="1">100%</option>
-    <option value=".9">90%</option>
-    <option value=".8">80%</option>
-    <option value=".7">70%</option>
-    <option value=".6">60%</option>
-    <option value=".5">50%</option>
-    <option value=".4">40%</option>
-    <option value=".3">30%</option>
+    <option value="0.9">90%</option>
+    <option value="0.8">80%</option>
+    <option value="0.7">70%</option>
+    <option value="0.6">60%</option>
+    <option value="0.5">50%</option>
+    <option value="0.4">40%</option>
+    <option value="0.3">30%</option>
   </select>
 </li>
 <li>
@@ -389,7 +389,7 @@
    <p>Personal Fouls</p>
    <select name="PFmin">
     <option value="0">0</option>
-    <option value=".5">.5</option>
+    <option value="0.5">.5</option>
     <option value="1">1</option>
     <option value="1.5">1.5</option>
     <option value="2">2</option>
@@ -408,7 +408,7 @@
    <p>Offensive Rebounds</p>
    <select name="ORmin">
     <option value="0">0</option>
-    <option value=".5">.5</option>
+    <option value="0.5">.5</option>
     <option value="1">1</option>
     <option value="1.5">1.5</option>
     <option value="2">2</option>
@@ -507,7 +507,7 @@
    <p>Steals per Game</p>
    <select name="SPGmin">
     <option value="0">0</option>
-    <option value=".5">.5</option>
+    <option value="0.5">.5</option>
     <option value="1">1</option>
     <option value="1.5">1.5</option>
   </select> 
@@ -522,7 +522,7 @@
    <p>Blocks per Game</p>
    <select name="BPGmin">
     <option value="0">0</option>
-    <option value=".5">.5</option>
+    <option value="0.5">.5</option>
     <option value="1">1</option>
     <option value="1.5">1.5</option>
   </select> 
