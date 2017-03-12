@@ -8,6 +8,8 @@ from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
+import os
+
 
 from .julian_waugh_crawler import *
 
@@ -208,7 +210,16 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
     
 
 
-    fig.savefig('plot.pdf') 
+    name = player_name.to_string()
+
+    #print(name.split())
+
+    path = os.path.abspath('media')
+    #player_name = player_name.to_string()
+
+    filename = path + '/' + '_'.join(name.split()[1:]) + '.png'
+    #print(filename)
+    fig.savefig(filename) 
 
 
 def make_stat_vector(row_index, league_df):

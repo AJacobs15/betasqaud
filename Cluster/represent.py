@@ -14,6 +14,7 @@ import julian_waugh_crawler as JWC
 import trader
 import pandas as pd
 from operator import itemgetter
+import os
 
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
@@ -351,8 +352,18 @@ def compare_player_to_centroid(centroid_vector, player_vector, player_name, posi
     plt.tight_layout()
     
 
+    name = player_name.to_string()
 
-    fig.savefig('plot.pdf') 
+    print(name.split())
+
+    path = os.path.abspath('media')
+    #player_name = player_name.to_string()
+
+    filename = path + '/' + '_'.join(name.split()[1:]) + '.png'
+    print(filename)
+    fig.savefig(filename) 
+
+
 
     #plt.show()
 
