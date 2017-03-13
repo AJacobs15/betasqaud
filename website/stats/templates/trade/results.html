@@ -1,7 +1,7 @@
 <h1>Potential Players</h1>
 <ul>
     {% for player in possible_players %}
-        <li> {{player}} </li>
+        <li> <a href="/trade/{{player.name}}/">{{ player.name }}</a>, who is a {{player.type}}: {{player.stats}} </li>
     {% endfor %}
 </ul>
 <input type=button value="Previous Page" onClick="javascript:history.go(-1);">

@@ -29,3 +29,24 @@ class Team(models.Model):
         
         return roster
 
+class Player:
+    
+    def __init__(self, player, cat):
+        self.name = player
+        self.type = cat
+        self.stats = self.find_stats(player)
+
+    def __str__(self):
+        return self.name
+
+    def find_stats(self,athlete):
+
+        import json
+
+        with open('data_dump.json') as data_file:    
+            data = json.load(data_file)
+
+        for player in data:
+            if player == athlete:
+                return data[player]['STATS']
+

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404,render
 import json
-from stats.models import Team
+from stats.models import Team, Player
 from Cluster.final import *
 
 def index(request):
@@ -63,6 +63,9 @@ def suggestions(request):
     max_stats.append(float(request.POST['PPGmax']))
     categories = ['GP','MPG','FGM','FGA','FG%','3PM','3PA','3P%','FTM','FTA','FT%','TOV','PF','OFR','DFR','RPG','APG','SPG','BPG','PPG']
     Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
-    possible_players = Trading.trader()
-
+    players = Trading.trader()
+    possible_players = []
+    for player in players:
+        temp = Player(player[0], player[1])
+        possible_players.append(temp)
     return render(request, 'trade/results.html', {'possible_players': possible_players})

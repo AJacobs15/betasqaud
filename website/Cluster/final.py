@@ -76,7 +76,7 @@ class GM(object):
         trade_players = []
         for player in target_players:
             position = clusters.player_to_position(player)
-            temp = player + ": " + position
+            temp = (player, position)
             trade_players.append(temp)
        
 
