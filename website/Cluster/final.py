@@ -20,9 +20,9 @@ We then cluster everything using a CLUDTER_DF object form represent.py
 
 RETURN_DICT, ROSTER_DICT = crawl(100, starting_url, limiting_domain)
 
-AGGREGATED_LEAGUE_DICT = aggregate_roster_dict(roster_dict)
+AGGREGATED_LEAGUE_DICT = aggregate_roster_dict(ROSTER_DICT)
 
-LEAGUE_DF, TEAM_DICT = trader.test_df(roster_dict, return_dict, switch=True)
+LEAGUE_DF, TEAM_DICT = test_df(ROSTER_DICT, RETURN_DICT, switch=True)
 
 
 
@@ -49,6 +49,7 @@ class GM(object):
         categories = constraints[CATEGORY_INDEX]
         minimums = constraints[MINIMUMS_INDEX]
         maximums = constraints[MAXIMUMS_INDEX]
+        self.team = team
 
 
         #apply the constraints
@@ -61,15 +62,15 @@ class GM(object):
     def trader(self):
 
         #run the trade. It will print out values as it goes.
-        agents = trade(self.team_df, self.constrained_league, LEAGUE_DF, roster_dict, team)
+        agents = trade(self.team_df, self.constrained_league, LEAGUE_DF, ROSTER_DICT, self.team)
 
         target_players = []
         if len(agents) >= 5:
             for x in range(5):
-                target_players.append(agents[x][1]["PLAYER"])
+                target_players.append(agents[x][1])
         else:
             for x in range(len(agents)):
-                target_players.append(agents[x][1]["PLAYER"])
+                target_players.append(agents[x][1])
 
         #get position
         trade_players = []
