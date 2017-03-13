@@ -15,6 +15,18 @@ limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams" 
 
+
+
+with open('return_dict.json') as data_file:    
+    first_dict = json.load(data_file)
+
+
+with open('roster_dict.json') as data_file:    
+    roster_dict = json.load(data_file)
+
+
+
+
 def test_df(roster_dict = None, first_dict = None, switch = True):    
     if not switch:
         first_dict, roster_dict = C.crawl(100, starting_url, limiting_domain)
