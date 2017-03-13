@@ -81,7 +81,7 @@ LEAGUE_DF, TEAM_DICT = trader.test_df(roster_dict, return_dict, switch=True)
 
 #use arthur's code to make your data bases etc; make a league dataframe call it LEAGUE_DF, TEAM_DICT
 
-clusters = represent.Cluster_DF(LEAGUE_DF)
+#clusters = represent.Cluster_DF(LEAGUE_DF)
 
 
 #note - I assume that we will be given the contraints
@@ -115,7 +115,7 @@ class GM(object):
 
         #run the trade. It will print out values as it goes.
         agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF)
-        #print(agents)
+        print(agents)
 
         target_players = []
         if len(agents) >= 5:
@@ -130,13 +130,42 @@ class GM(object):
         #position = clusters.player_to_position(target_player)
 
 
+<<<<<<< HEAD
+        print(target_player, position)
+=======
         #return target_player, position
         return target_players
+>>>>>>> 2404d12d295a16811e1d5a9dfb993a8ab1947bfc
 
         #make a visual file
         '''clusters.plot(target_player)
 
         link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK'].to_string().split()[1]
+
+        data_string, img_links, award_list = C.get_individual_player_data(link, limiting_domain)
+
+        if ((data_string == None) and (img_links == None) and (award_list == None)):
+            print('the player is currently injured')
+
+        print(data_string)
+        print(img_links)
+        print(award_list)'''
+
+        #run the trade. It will print out values as it goes.
+        agents = trader.trade(self.team_df, self.constrained_league)
+        print(agents)
+
+        target_player = agents[0]
+
+        #get position
+
+        '''position = clusters.player_to_position(target_player)
+        print(position)
+
+        #make a visual file
+        clusters.plot(target_player)
+
+        link = LEAGUE_DF[LEAGUE_DF['PLAYER'] == target_player]['LINK']
 
         data_string, img_links, award_list = C.get_individual_player_data(link, limiting_domain)
 

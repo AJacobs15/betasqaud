@@ -38,11 +38,10 @@ def ideal_players(league, categories, minimums, maximums):
     for stat in categories:
         minimum = minimums[0]
         maximum = maximums[0]
-        original_file = selection(league, stat, minimum, maximum)
+        league = selection(league, stat, minimum, maximum)
         maximums = maximums[1:]
         minimums = minimums[1:]
-    
-    return original_file
+    return league
 
 def ideal_player_stats(original_file):
     players = []

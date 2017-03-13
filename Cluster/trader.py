@@ -74,7 +74,7 @@ def trade(team_a, targets, league):
         for i in range(len(targets)):
             agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
         agents.sort
-
+        agents = remove_team_agents(team_a, agents)
         rank = 1
         Top_Trade_Targets = []
         for player in agents:
@@ -107,6 +107,31 @@ def feasibility(team_a, target, league):
         #print(rank, tup[1].loc["PLAYER"])
         rank += 1
     return final_team
+
+def remove_team_agents(team_a, agents):
+    for x in range(len(agents)):
+        print(x)
+        agent = agents[x][1]['PLAYER']
+        if x == len(agents)-1:
+            for i in range(len(team_a)):
+                player = team_a.iloc[i]['PLAYER']
+                if player == agent:
+                    agents = agents[x-1::-1]
+                    return agents
+        elif x == 0:
+            for i in range(len(team_a)):
+                player = team_a.iloc[i]['PLAYER']
+                if player == agent:
+                    agents = agents[x+1:]
+                    return remove_team_agents(team_a, agents)
+        else:
+            for i in range(len(team_a)):
+                player = team_a.iloc[i]['PLAYER']
+                if player == agent:
+                    agents = agents[x-1::-1] + agents[x+1:]
+                    return remove_team_agents(team_a, agents)
+    return agents
+
 
 
 def stat_vector(player, league):
