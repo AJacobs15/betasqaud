@@ -208,11 +208,11 @@ def get_individual_player_data(player_link, limiting_domain):
 
     proper_url, soup = make_soup(player_link, limiting_domain, player_switch = True)
 
-    print(soup)
+    #print(soup)
 
     #turn back to original when submitting
     tags = soup.find_all('div', class_ = 'profile-box') #check if reading the request failed
-    print(tags)
+    #print(tags)
 
     if tags != []:
     #print(soup)
@@ -341,7 +341,7 @@ def roster_dict_to_player_info(roster_dict, limiting_domain):
     for team, player_dict in roster_dict.items():
         for player, player_link in player_dict.items():
             #print(player, player_link)
-            print(player)
+            #print(player)
             data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
             updated[player] = {}
             updated[player]['bio'] = data_string
@@ -636,7 +636,7 @@ def build_team_stats_dictionary(league_dictionary):
         for tup in tuple_list:
             stats = tup[1]
             stats = np.array([float(v) for v in stats])
-            print(stats)
+            #print(stats)
             cnt = 0
             '''for s in stats:
                 print(type(s))
