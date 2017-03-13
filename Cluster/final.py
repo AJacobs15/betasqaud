@@ -129,13 +129,8 @@ class GM(object):
 
         #position = clusters.player_to_position(target_player)
 
-
-<<<<<<< HEAD
-        print(target_player, position)
-=======
         #return target_player, position
         return target_players
->>>>>>> 2404d12d295a16811e1d5a9dfb993a8ab1947bfc
 
         #make a visual file
         '''clusters.plot(target_player)
@@ -152,12 +147,7 @@ class GM(object):
         print(award_list)'''
 
         #run the trade. It will print out values as it goes.
-        agents = trader.trade(self.team_df, self.constrained_league)
-        print(agents)
-
-        target_player = agents[0]
-
-        #get position
+    
 
         '''position = clusters.player_to_position(target_player)
         print(position)
