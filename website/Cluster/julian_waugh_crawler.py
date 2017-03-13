@@ -176,6 +176,7 @@ def first_last_name(string):
         rv = list_string[1][1:] + ' ' + list_string[0]
         return rv
     
+
 def build_real_roster(link, limiting_domain):
     '''
     Takes a link to a roster page and the limiting domain associated with that page.
@@ -196,6 +197,7 @@ def build_real_roster(link, limiting_domain):
         rv[name] = link1
     return rv
 
+
 def get_name_get_link(cell):
     '''
     Given a cell in a table containing roster names for a team, returns the 
@@ -207,10 +209,6 @@ def get_name_get_link(cell):
     link = 'http://basketball.realgm.com' + link
     name = td_list[1]['rel']
     return name, link
-
-
-
-
 
 
 def get_individual_player_data(player_link, limiting_domain):
@@ -246,6 +244,75 @@ def get_individual_player_data(player_link, limiting_domain):
         return data_string, img_links, award_list
     else:
         return None, None, None
+
+
+def aggregate_roster_dict(roster_dict):
+    '''
+    While it is sometimes helpfulto store this information in roster form, 
+    it is also helpful for the final scraping to aggregate the rosters
+    into one giant dictionary that maps player names to their links.
+
+    roster_dict is a nested dictionary that maps links to players and players
+    to  links   
+    '''
+    rv = {}
+
+    for team, team_dict in roster_dict.items():
+        for player_name, link in team_dict.items():
+            rv[player_name] = link
+
+    return rv
+
+
+
+def get_top_trade_data(player_list, player_dict, limiting_domain):
+    '''
+    Recursive function. Given a list of the best trade targets, returns data
+    for the top trade target. Also, checks to make sure that none of the 
+    options are injured (in other words, the read to their individual page fails)
+
+    player_list is a list of string names of the top trade targets.
+
+    player_dict is a dictionary that maps player links to player names
+
+    returns the player name as a string for the top target, and a tuple including the
+    player data, the image links, and the awards that player has recieved in the league.
+    '''
+
+    player = player_list[0]
+
+    player_link = player_dict[player]
+
+    data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
+
+    if data_string == None: #this means the read failed, or in other words, the player is injured
+        if len(player_list) == 0: #every single trade option is injured - highly unlikely, but I am including it to be safe
+            return player, None
+        else:
+            return get_top_trade_data(player_list[1:], player_dict, limiting_domain)
+    else:
+        return (player, data_string, img_links, award_list)
+
+
+
+def get_images(trade_option):
+    '''
+    Trade option is a four-tuple of the form (player, data_string, img_links, award_list).
+
+    the trade option includes links to the images of players. Here, I access the images
+    and save them.
+    '''
+    img_index = 2
+    player_index = 0
+    team_index = 1
+
+    img_links = trade_option[img_index]
+    player_link = img_links[player_index]
+    team_link = img_links[team_index]
+
+    urllib.request.urlretrieve(player_link, "player.jpg")
+    urllib.request.urlretrieve(team_link, "team.png")
+
 
 def make_soup(initial_url, limiting_domain, player_switch = False):
     '''

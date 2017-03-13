@@ -18,7 +18,11 @@ is contained in trader.py.
 We then cluster everything using a CLUDTER_DF object form represent.py
 '''
 
-LEAGUE_DF, TEAM_DICT = test_df(switch=False)
+RETURN_DICT, ROSTER_DICT = crawl(100, starting_url, limiting_domain)
+
+AGGREGATED_LEAGUE_DICT = aggregate_roster_dict(roster_dict)
+
+LEAGUE_DF, TEAM_DICT = trader.test_df(roster_dict, return_dict, switch=True)
 
 
 
@@ -57,7 +61,7 @@ class GM(object):
     def trader(self):
 
         #run the trade. It will print out values as it goes.
-        agents = trade(self.team_df, self.constrained_league, LEAGUE_DF)
+        agents = trade(self.team_df, self.constrained_league, LEAGUE_DF, roster_dict, team)
 
         target_players = []
         if len(agents) >= 5:

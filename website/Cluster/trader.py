@@ -51,27 +51,39 @@ def test_df(roster_dict = None, first_dict = None, switch = True):
 #league, teams = test_df()
 
 
-def trade(team_a, targets, league):
-        percents = ['3P%', 'FG%', 'FT%']
-        flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
-        team_score = 0
-        for i in range(len(team_a)):
-            player = team_a.iloc[i]
-            team_score += player_score(player, team_a, league)
-        agents = []
-        for i in range(len(targets)):
-            agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
-        agents.sort
-        agents = remove_team_agents(team_a, agents)
-        rank = 1
-        print("Top Trade Targets")
-        for player in agents:
-            print(rank, player[1].loc["PLAYER"])
-            feasibility(team_a, player[1], league)
-            rank += 1
+def trade(team_a, targets, league, roster_dict, team_name):
+    '''
+    roster_dict is a dictionary mapping links to players and players to teams.
+    team_name is a string describing the name of a team.
+    '''
+    percents = ['3P%', 'FG%', 'FT%']
+    flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
+    team_score = 0
+    for i in range(len(team_a)):
+        player = team_a.iloc[i]
+        team_score += player_score(player, team_a, league)
+    agents = []
+    for i in range(len(targets)):
+        agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
+    
+    agents = remove_team_agents(team_name, agents, roster_dict)
+
+    #print(agents)
+    agents.sort
+    rank = 1
+    Top_Trade_Targets = []
+    for player in agents:
+        trade_chips = []
+        trade_chips.append(rank)
+        trade_chips.append(player[1].loc["PLAYER"])
+        chips = feasibility(team_a, player[1], league)
+        for chip in chips:
+            trade_chips.append(chip)
+        Top_Trade_Targets.append(trade_chips)
+        rank += 1
 
 
-        return agents #return agents
+    return Top_Trade_Targets #return agents
 
 def feasibility(team_a, target, league):
 
@@ -90,29 +102,28 @@ def feasibility(team_a, target, league):
 
     return team
     
-def remove_team_agents(team_a, agents):
-    for x in range(len(agents)):
-        print(x)
-        agent = agents[x][1]['PLAYER']
-        if x == len(agents)-1:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x-1::-1]
-                    return agents
-        elif x == 0:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x+1:]
-                    return remove_team_agents(team_a, agents)
-        else:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x-1::-1] + agents[x+1:]
-                    return remove_team_agents(team_a, agents)
-    return agents
+def remove_team_agents(team_name, agents, roster_dict):
+    '''
+    team_name is a string describing the team name.
+    roster_dict is a nested dictionary mapping links to players and then players to teams.
+    agents is a list of tuples of the form [(player_score, player_dataframe)...].
+
+
+    '''
+    dataframe_index = 1
+
+    rv = []
+
+    #for x in range(len(agents)):
+    
+    for agent in agents:
+        name = agent[dataframe_index]['PLAYER']
+
+        if name not in roster_dict[team_name]:
+            rv.append(agent)
+    return rv
+
+
 
 def stat_vector(player, league):
 
