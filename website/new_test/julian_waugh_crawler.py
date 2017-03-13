@@ -7,15 +7,12 @@ import sys
 import csv
 import scraping
 import numpy as np
-
+import json
 
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
-
-
 bad_link = 'http://basketball.realgm.com/nba/stats'
-
 
 def generate_links(soup, proper_url, limiting_domain):
     '''
@@ -209,33 +206,22 @@ def get_individual_player_data(player_link, limiting_domain):
 
     proper_url, soup = make_soup(player_link, limiting_domain, player_switch = True)
 
-    #print(soup)
+    main_tag = soup.find_all('div', class_ = 'profile-box')[0]
+    data_string = main_tag.text
 
-    #turn back to original when submitting
-    tags = soup.find_all('div', class_ = 'profile-box') #check if reading the request failed
-    #print(tags)
+    img_tags = main_tag.find_all('img')
+    img_links = []
+    for tag in img_tags:
+        img_links.append(tag['src'])
 
-    if tags != []:
-    #print(soup)
-
-        main_tag = tags[0]
-        data_string = main_tag.text
-
-        img_tags = main_tag.find_all('img')
-        img_links = []
-        for tag in img_tags:
-            img_links.append(tag['src'])
-
-        honor_tags = soup.find_all('h2')
-        award_list = []
-        for tag in honor_tags:
-            if tag.text == 'NBA Awards & Honors':
-                awards = tag.next_sibling.next_sibling.find_all('tr')
-                for t in awards:
-                    award_list.append(t.text)
-        return data_string, img_links, award_list
-    else:
-        return None, None, None
+    honor_tags = soup.find_all('h2')
+    award_list = []
+    for tag in honor_tags:
+        if tag.text == 'NBA Awards & Honors':
+            awards = tag.next_sibling.next_sibling.find_all('tr')
+            for t in awards:
+                award_list.append(t.text)
+    return data_string, img_links, award_list
 
 
     
@@ -326,35 +312,7 @@ def crawl(num_pages_to_crawl,starting_url, limiting_domain):
 
 
     
-    final_return_dict =  clean_return_dict(roster_dict, return_dict)
-    return final_return_dict, roster_dict
-
-
-def roster_dict_to_player_info(roster_dict, limiting_domain):
-    '''
-    Updates the roster dictionary by following the links 
-    and scraping all of those pages.
-
-    Returns the updated roster dictionary that maps
-    player names to images, awards, descriptions, and stats.
-    '''
-    updated = {}
-    for team, player_dict in roster_dict.items():
-        for player, player_link in player_dict.items():
-            #print(player, player_link)
-            #print(player)
-            data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
-            updated[player] = {}
-            updated[player]['bio'] = data_string
-            updated[player]['image'] = img_links
-            updated[player]['awards'] = award_list
-
-    return updated
-
-def test_updated(updated):
-    for player, player_data in updated.items():
-        if ((player_data['bio'] == None) and (player_data['image'] == None) and (player_data['awards'] == None)):
-            print(player)
+    return clean_return_dict(roster_dict, return_dict)
 
 
 
@@ -363,14 +321,14 @@ def clean_return_dict(roster_dict, return_dict):
     gets rid of all of the weird categories in the return dictionary from the crawler.
     Additionally, updates names.
     '''
-    del return_dict["nba stats leaders"]
-    ''''return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
+    del return_dict["Scoring Per"]
+    return_dict['Los Angeles Lakers'] = return_dict.pop('Los Angeles')
     return_dict['Golden State Warriors'] = return_dict.pop('Golden State')
     return_dict['New York Knicks'] = return_dict.pop('New York')
     return_dict['Oklahoma City Thunder'] = return_dict.pop('Oklahoma City')
     return_dict['San Antonio Spurs'] = return_dict.pop('San Antonio')
     return_dict['Portland Trail Blazers'] = return_dict.pop('Portland Trail')
-    return_dict['New Orleans Pelicans'] = return_dict.pop('New Orleans')'''
+    return_dict['New Orleans Pelicans'] = return_dict.pop('New Orleans')
 
     '''for team, stat_list in return_dict.items():
 
@@ -443,7 +401,7 @@ def eliminate_multiplicity(roster_dict, return_dict):
     and roster_dict, a dictionary describing the accurate rosters of the entire league,
     returns a an updated league_statistic dictionary without any multiplicity.
     '''
-    '''multiplicity_dict = search_for_multiplicity(return_dict)
+    multiplicity_dict = search_for_multiplicity(return_dict)
 
     players_to_elimate = {}
     
@@ -455,39 +413,17 @@ def eliminate_multiplicity(roster_dict, return_dict):
                 else:
                     players_to_elimate[team].add(player)
     
+
     for team in players_to_elimate:
         wrong_players = players_to_elimate[team]
         roster = return_dict[team]
 
         new_team = []
-        #print(team)
         for data_tupl in roster:
-            #print('Trump train')
-            player = str(data_tupl[0])
-
-            #if team == "San Antonio Spurs":
-                #print(roster)
+            player = data_tupl[0]
             if player not in wrong_players:
                 new_team.append(data_tupl)
-        return_dict[team] = new_team'''
-
-
-    #The previous code gets rid of people who were traded. Now, I get rid of people who were waived:
-
-    for team, team_stats in return_dict.items():
-        new_stats = []
-
-        for player_tupl in team_stats:
-            player = player_tupl[0]
-            stats = player_tupl[1]
-
-            if player in roster_dict[team]:
-                new_stats.append((player, stats))
-
-        return_dict[team] = new_stats
-
-
-
+        return_dict[team] = new_team
 
     return return_dict
 
@@ -560,7 +496,20 @@ def create_csv(dictionary):
                 stat = str(stats)
                 writer = csv.writer(csvfile4, delimiter='|')
                 writer.writerow([p_id, player, t_id, team, stat])   
-
+    with open("pure_stats.csv", 'w') as csvfile5:
+        p = 40
+        for team in dictionary.keys():
+            for x in dictionary[team]:
+                stats = x[1]
+                player = x[0]
+                p += 1
+                stat_num = 0
+                stat = str(stats)
+                for x in stats:
+                    stat = str(x)
+                    writer = csv.writer(csvfile5, delimiter='|')
+                    writer.writerow([player, stat_num, stat]) 
+                    stat_num += 1
 
 
 def test(d):
@@ -637,7 +586,7 @@ def build_team_stats_dictionary(league_dictionary):
         for tup in tuple_list:
             stats = tup[1]
             stats = np.array([float(v) for v in stats])
-            #print(stats)
+            print(stats)
             cnt = 0
             '''for s in stats:
                 print(type(s))
@@ -651,7 +600,7 @@ def build_team_stats_dictionary(league_dictionary):
         team_dictionary[team_name] = avg
 
     return team_dictionary
-
+    
 
 
 def write_to_JSON(filename):
@@ -662,21 +611,24 @@ def write_to_JSON(filename):
     '''
 
 
-    return_dict, roster_dict = crawl(100, starting_url, limiting_domain)
-    #u = roster_dict_to_player_info(roster_dict, limiting_domain)
-    
+    return_dict = crawl(100, starting_url, limiting_domain)
+
+    player_index = 0
+    stats_index = 1
+
+    rv ={}
+    for team_name, team_stats in return_dict.items():
+        for player_tupl in team_stats:
+            player_name = player_tupl[player_index]
+            player_stats = player_tupl[stats_index]
+
+            rv[player_name] = {}
+            rv[player_name]['TEAM'] = team_name
+            rv[player_name]['STATS'] = player_stats
+
     with open(filename, 'w') as fp:
-        json.dump(roster_dict, fp)
+        json.dump(rv, fp)
 
 
 
 
-def view_data(filename):
-    with open(filename) as data_file:    
-        data = json.load(data_file)
-
-    cnt = 0
-    for k, v in data.items():
-        print(k)
-        cnt += 1
-    print(cnt)

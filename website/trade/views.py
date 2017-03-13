@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404,render
 import json
 from stats.models import Team
+from Cluster.final import *
 
 def index(request):
     teams = Team.objects.all()
@@ -15,44 +16,53 @@ def suggestions(request):
     team_list = []
     for team in teams:
         team_list.append(team)
-    team_traded = request.POST['Team']
+    team_traded = request.POST['team_do_thing']
     that_team = get_object_or_404(Team, pk=team_traded)
     possible_players = []
-    stats = []
-    stats.append((request.POST['GPmin'],request.POST['GPmax']))
-    stats.append((request.POST['MPGmin'],request.POST['MPGmax']))
-    stats.append((request.POST['FGMmin'],request.POST['FGMmax']))
-    stats.append((request.POST['FGAmin'],request.POST['FGAmax']))
-    stats.append((request.POST['FGmin'],request.POST['FGmax']))
-    stats.append((request.POST['3PMmin'],request.POST['3PMmax']))
-    stats.append((request.POST['3PAmin'],request.POST['3PAmax']))
-    stats.append((request.POST['3Pmin'],request.POST['3Pmax']))
-    stats.append((request.POST['FTMmin'],request.POST['FTMmax']))
-    stats.append((request.POST['FTAmin'],request.POST['FTAmax']))
-    stats.append((request.POST['FTmin'],request.POST['FTmax']))
-    stats.append((request.POST['TOVmin'],request.POST['TOVmax']))
-    stats.append((request.POST['PFmin'],request.POST['PFmax']))
-    stats.append((request.POST['ORmin'],request.POST['ORmax']))
-    stats.append((request.POST['DRmin'],request.POST['DRmax']))
-    stats.append((request.POST['RPGmin'],request.POST['RPGmax']))
-    stats.append((request.POST['APGmin'],request.POST['APGmax']))
-    stats.append((request.POST['SPGmin'],request.POST['SPGmax']))
-    stats.append((request.POST['BPGmin'],request.POST['BPGmax']))
-    stats.append((request.POST['PPGmin'],request.POST['PPGmax']))
-    with open('data_dump.json') as data_file:    
-            data = json.load(data_file)
-    for player in data:
-        temp = data[player]['STATS']
-        passes = True
-        if data[player]['TEAM'] != team_traded:
-            for stat in range(len(temp)):
-                if temp[stat] >= int(stats[stat][0]):
-                    if temp[stat] > int(stats[stat][1]):
-                        passes = False
-                else:
-                    passes = False
-        else:
-            passes = False
-        if passes:
-            possible_players.append(player)
+    min_stats = []
+    max_stats = []
+    min_stats.append(float(request.POST['GPmin']))
+    max_stats.append(float(request.POST['GPmax']))
+    min_stats.append(float(request.POST['MPGmin']))
+    max_stats.append(float(request.POST['MPGmax']))
+    min_stats.append(float(request.POST['FGMmin']))
+    max_stats.append(float(request.POST['FGMmax']))
+    min_stats.append(float(request.POST['FGAmin']))
+    max_stats.append(float(request.POST['FGAmax']))
+    min_stats.append(float(request.POST['FGmin']))
+    max_stats.append(float(request.POST['FGmax']))
+    min_stats.append(float(request.POST['3PMmin']))
+    max_stats.append(float(request.POST['3PMmax']))
+    min_stats.append(float(request.POST['3PAmin']))
+    max_stats.append(float(request.POST['3PAmax']))
+    min_stats.append(float(request.POST['3Pmin']))
+    max_stats.append(float(request.POST['3Pmax']))
+    min_stats.append(float(request.POST['FTMmin']))
+    max_stats.append(float(request.POST['FTMmax']))
+    min_stats.append(float(request.POST['FTAmin']))
+    max_stats.append(float(request.POST['FTAmax']))
+    min_stats.append(float(request.POST['FTmin']))
+    max_stats.append(float(request.POST['FTmax']))
+    min_stats.append(float(request.POST['TOVmin']))
+    max_stats.append(float(request.POST['TOVmax']))
+    min_stats.append(float(request.POST['PFmin']))
+    max_stats.append(float(request.POST['PFmax']))
+    min_stats.append(float(request.POST['ORmin']))
+    max_stats.append(float(request.POST['ORmax']))
+    min_stats.append(float(request.POST['DRmin']))
+    max_stats.append(float(request.POST['DRmax']))
+    min_stats.append(float(request.POST['RPGmin']))
+    max_stats.append(float(request.POST['RPGmax']))
+    min_stats.append(float(request.POST['APGmin']))
+    max_stats.append(float(request.POST['APGmax']))
+    min_stats.append(float(request.POST['SPGmin']))
+    max_stats.append(float(request.POST['SPGmax']))
+    min_stats.append(float(request.POST['BPGmin']))
+    max_stats.append(float(request.POST['BPGmax']))
+    min_stats.append(float(request.POST['PPGmin']))
+    max_stats.append(float(request.POST['PPGmax']))
+    categories = ['GP','MPG','FGM','FGA','FG%','3PM','3PA','3P%','FTM','FTA','FT%','TOV','PF','OFR','DFR','RPG','APG','SPG','BPG','PPG']
+    Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
+    possible_players = Trading.trader()
+
     return render(request, 'trade/results.html', {'possible_players': possible_players})
