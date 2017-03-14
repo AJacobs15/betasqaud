@@ -7,29 +7,17 @@ import sys
 import csv
 import numpy as np
 import pandas as pd
-import scraping
+import scraping as s
 import numpy as np
-import julian_waugh_crawler as C
+import julian_waugh_crawler as jw
 
 limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams" 
 
-
-
-with open('return_dict.json') as data_file:    
-    first_dict = json.load(data_file)
-
-
-with open('roster_dict.json') as data_file:    
-    roster_dict = json.load(data_file)
-
-
-
-
 def test_df(roster_dict = None, first_dict = None, switch = True):    
     if not switch:
-        first_dict, roster_dict = C.crawl(100, starting_url, limiting_domain)
+        first_dict, roster_dict = jw.crawl(100, starting_url, limiting_domain)
     team_names = list(first_dict.keys())
     teams = []
     rosters = {}
@@ -44,8 +32,6 @@ def test_df(roster_dict = None, first_dict = None, switch = True):
             name.append(player[0])
             for stat in player[1]:
                 stats.append(stat)
-            #print("team", teamname)
-            #print("player", player[0])
             link.append(roster_dict[teamname][player[0]])
             combined = tuple(name + stats + link)
             roster.append(combined)
@@ -63,32 +49,46 @@ def test_df(roster_dict = None, first_dict = None, switch = True):
 #league, teams = test_df()
 
 
-def trade(team_a, targets, league):
-        percents = ['3P%', 'FG%', 'FT%']
-        flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
-        team_score = 0
-        for i in range(len(team_a)):
-            player = team_a.iloc[i]
-            team_score += player_score(player, team_a, league)
-        agents = []
-        for i in range(len(targets)):
-            agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
-        agents.sort
-        agents = remove_team_agents(team_a, agents)
-        rank = 1
-        Top_Trade_Targets = []
-        for player in agents:
+def trade(team_a, targets, league, roster_dict, team_name):
+    '''
+    roster_dict is a dictionary mapping links to players and players to teams.
+    team_name is a string describing the name of a team.
+    '''
+    percents = ['3P%', 'FG%', 'FT%']
+    flat =  ['RPG', 'APG', 'SPG', 'BPG', 'PPG']
+    team_score = 0
+    for i in range(len(team_a)):
+        player = team_a.iloc[i]
+        team_score += player_score(player, team_a, league)
+    agents = []
+    for i in range(len(targets)):
+        agents.append((player_score(targets.iloc[i], team_a, league), targets.iloc[i]))
+    
+    agents = remove_team_agents(team_name, agents, roster_dict)
+
+    #print(agents)
+    agents.sort
+    rank = 1
+    Top_Trade_Targets = []
+    count = 1
+    for player in agents:
+        if count <= 3:
             trade_chips = []
             trade_chips.append(rank)
             trade_chips.append(player[1].loc["PLAYER"])
+            count += 1
             chips = feasibility(team_a, player[1], league)
+            count_1 = 1
             for chip in chips:
-                trade_chips.append(chip)
+                if count_1 <= 3:
+                    trade_chips.append(chip)
+                    count_1 += 1
             Top_Trade_Targets.append(trade_chips)
             rank += 1
+            
 
-    
-        return Top_Trade_Targets #return agents
+
+    return Top_Trade_Targets #return agents
 
 def feasibility(team_a, target, league):
 
@@ -100,37 +100,33 @@ def feasibility(team_a, target, league):
 
     #print("Likely trade chips for", target.loc["PLAYER"])
     rank = 1
-    final_team = []
+
     for tup in team:
-        final_team.append(rank)
-        final_team.append(tup[1].loc["PLAYER"])
         #print(rank, tup[1].loc["PLAYER"])
         rank += 1
-    return final_team
 
-def remove_team_agents(team_a, agents):
-    for x in range(len(agents)):
-        print(x)
-        agent = agents[x][1]['PLAYER']
-        if x == len(agents)-1:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x-1::-1]
-                    return agents
-        elif x == 0:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x+1:]
-                    return remove_team_agents(team_a, agents)
-        else:
-            for i in range(len(team_a)):
-                player = team_a.iloc[i]['PLAYER']
-                if player == agent:
-                    agents = agents[x-1::-1] + agents[x+1:]
-                    return remove_team_agents(team_a, agents)
-    return agents
+    return team
+    
+def remove_team_agents(team_name, agents, roster_dict):
+    '''
+    team_name is a string describing the team name.
+    roster_dict is a nested dictionary mapping links to players and then players to teams.
+    agents is a list of tuples of the form [(player_score, player_dataframe)...].
+
+
+    '''
+    dataframe_index = 1
+
+    rv = []
+
+    #for x in range(len(agents)):
+    
+    for agent in agents:
+        name = agent[dataframe_index]['PLAYER']
+
+        if name not in roster_dict[team_name]:
+            rv.append(agent)
+    return rv
 
 
 
