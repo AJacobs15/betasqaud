@@ -39,12 +39,21 @@ class Team(models.Model):
 class Player:
     
     def __init__(self, player, data, image, awards, cat, tokens):
+        
+        token_list = []
+        for i in range(len(tokens)):
+            token = tokens[i]
+            info = 'option' + ' #' + str(i+1) + ': ' + token
+            token_list.append(info)
+
+        token_string = ', '.join(token_list)
+
         self.name = player
         self.data = data
         self.image_links = image
         self.awards = awards
         self.type = cat
-        self.tokens = tokens
+        self.tokens = token_string
         self.stats = self.find_stats(player)
         self.graph = self.find_graph(player)
 
@@ -74,5 +83,5 @@ class Player:
 
     def find_graph(self, player):
         temp = player.split()
-        string = "/media/" + temp[0] + "_" + temp[1] + ".png"
+        string =  temp[0] + "_" + temp[1] + ".png"
         return string
