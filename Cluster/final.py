@@ -82,7 +82,9 @@ class GM(object):
                 name = trade_chip['PLAYER']
                 chips.append(name)
 
-            rv.append((trade_option, chips))
+            position = clusters.player_to_position(target_name)
+
+            rv.append((trade_option, position, chips))
 
         return rv
 
