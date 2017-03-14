@@ -265,7 +265,7 @@ def aggregate_roster_dict(roster_dict):
 
 
 
-def get_top_trade_data(player_list, player_dict, limiting_domain):
+def get_top_trade_data(player_name, player_dict, limiting_domain):
     '''
     Recursive function. Given a list of the best trade targets, returns data
     for the top trade target. Also, checks to make sure that none of the 
@@ -278,16 +278,12 @@ def get_top_trade_data(player_list, player_dict, limiting_domain):
     returns a tuple containing the player name, data_string, image links, and award_list.
     '''
 
-    rv = []
+    
+    player_link = player_dict[player_name]
+    data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
+    if data_string != None: #this means the read failed, or in other words, the player is injured
+        return (player, data_string, img_links, award_list)
 
-    for player in player_list:
-        player_link = player_dict[player]
-
-        data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
-
-        if data_string != None: #this means the read failed, or in other words, the player is injured
-            rv.append((player, data_string, img_links, award_list))
-    return rv
 
 def get_images(trade_option):
     '''
