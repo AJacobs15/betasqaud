@@ -84,18 +84,19 @@ class GM(object):
         for trade_list in agents:
             target_name = trade_list[0]
             trade_option = get_top_trade_data(target_name, PLAYER_DICT, limiting_domain) #get individual information
-            get_images(trade_option) #save images
+            if trade_option != None: #if the player is injured, trade_option will be None
+                get_images(trade_option) #save images
 
-            clusters.plot(target_name) #get graphic
+                clusters.plot(target_name) #get graphic
 
-            chips = []
-            for trade_chip in trade_list[1:]:
-                name = trade_chip['PLAYER']
-                chips.append(name)
+                chips = []
+                for trade_chip in trade_list[1:]:
+                    name = trade_chip['PLAYER']
+                    chips.append(name)
 
-            position = clusters.player_to_position(target_name)
+                position = clusters.player_to_position(target_name)
 
-            rv.append((trade_option, position, chips))
+                rv.append((trade_option, position, chips))
 
 
         return rv
