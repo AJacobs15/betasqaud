@@ -275,25 +275,19 @@ def get_top_trade_data(player_list, player_dict, limiting_domain):
 
     player_dict is a dictionary that maps player links to player names
 
-    returns the player name as a string for the top target, and a tuple including the
-    player data, the image links, and the awards that player has recieved in the league.
+    returns a tuple containing the player name, data_string, image links, and award_list.
     '''
 
-    player = player_list[0]
+    rv = []
 
-    player_link = player_dict[player]
+    for player in player_list:
+        player_link = player_dict[player]
 
-    data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
+        data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
 
-    if data_string == None: #this means the read failed, or in other words, the player is injured
-        if len(player_list) == 0: #every single trade option is injured - highly unlikely, but I am including it to be safe
-            return player, None
-        else:
-            return get_top_trade_data(player_list[1:], player_dict, limiting_domain)
-    else:
-        return (player, data_string, img_links, award_list)
-
-
+        if data_string != None: #this means the read failed, or in other words, the player is injured
+            rv.append((player, data_string, img_links, award_list))
+    return rv
 
 def get_images(trade_option):
     '''
@@ -310,8 +304,13 @@ def get_images(trade_option):
     player_link = img_links[player_index]
     team_link = img_links[team_index]
 
-    urllib.request.urlretrieve(player_link, "player.jpg")
-    urllib.request.urlretrieve(team_link, "team.png")
+    player_name = trade_option[player_index]
+    player_name = '_'.join(player_name.split())
+    team = player_name + '_team'
+
+
+    urllib.request.urlretrieve(player_link, player_name + ".jpg")
+    urllib.request.urlretrieve(team_link, team + ".png")
 
 
 def make_soup(initial_url, limiting_domain, player_switch = False):
