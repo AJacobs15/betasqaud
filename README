@@ -30,27 +30,27 @@ navigating the website is very self explanatory.
 
 Steps to Success:
 
-1. Run final.py
+    1. Run final.py
 
-2. Set your original nba team. Example: 'Boston Celtics' or 'Miami Heat'
+    2. Set your original nba team. Example: 'Boston Celtics' or 'Miami Heat'
 
-3.Generate constraints for players you wish to trade for. Contraint is a tuple of three lists containing the categories, the minimums, and the maximums necessary to run the trade. (when running the web interface, these will be input by the user)
+    3.Generate constraints for players you wish to trade for. Contraint is a tuple of three lists containing the categories, the minimums, and the maximums necessary to run the trade. (when running the web interface, these will be input by the user)
 
-Here are the categories you can screen for:
-'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG','SPG', 'BPG', and 'PPG'. 
+    Here are the categories you can screen for:
+    'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG','SPG', 'BPG', and 'PPG'. 
 
-Sample constraint: constraints = (['PPG', 'APG', 'BPG'], [5, 5, 1], [12, 8, 2])
+    Sample constraint: constraints = (['PPG', 'APG', 'BPG'], [5, 5, 1], [12, 8, 2])
 
-4. Create a GM object. This will be your way to interact with our trading algorithms. The GM class takes in two parameters, team and constraints, both of which you have just created via the previous steps.
+    4. Create a GM object. This will be your way to interact with our trading algorithms. The GM class takes in two parameters, team and constraints, both of which you have just created via the previous steps.
 
-Sample GM: gm = GM(team, constraints)
-*note that the variables team and constraint are created in steps 2 and 3.
+    Sample GM: gm = GM(team, constraints)
+    *note that the variables team and constraint are created in steps 2 and 3.
 
-5. Run the trader method within your GM. This will return a list of the following form: [((trade_option), [chips])...#repeated for each trade target#]  Trade option is a four-tuple of the form (player, data_string, img_links, award_list). chips is a list of the best trades from your team for the current player.
+    5. Run the trader method within your GM. This will return a list of the following form: [((trade_option), [chips])...#repeated for each trade target#]  Trade option is a four-tuple of the form (player, data_string, img_links, award_list). chips is a list of the best trades from your team for the current player.
 
-All image files are saved to a folder called media.
+    All image files are saved to a folder called media.
 
-6. Enjoy!
+    6. Enjoy!
 
 **PLEASE NOTE **
     We went to a great deal of effort to write code that scrapes images from the web and code
