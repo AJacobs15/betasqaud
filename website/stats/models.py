@@ -31,10 +31,15 @@ class Team(models.Model):
 
 class Player:
     
-    def __init__(self, player, cat):
+    def __init__(self, player, data, image, awards, cat, tokens):
         self.name = player
+        self.data = data
+        self.image_links = image
+        self.awards = awards
         self.type = cat
+        self.tokens = tokens
         self.stats = self.find_stats(player)
+
 
     def __str__(self):
         return self.name
@@ -49,4 +54,3 @@ class Player:
         for player in data:
             if player == athlete:
                 return data[player]['STATS']
-

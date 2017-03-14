@@ -278,7 +278,7 @@ def get_top_trade_data(player_name, player_dict, limiting_domain):
     returns a tuple containing the player name, data_string, image links, and award_list.
     '''
 
-    
+    print(player_name) 
     player_link = player_dict[player_name]
     data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
     if data_string != None: #this means the read failed, or in other words, the player is injured
