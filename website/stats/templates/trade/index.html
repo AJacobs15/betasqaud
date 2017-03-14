@@ -2,7 +2,7 @@
 <form action="suggestions/" method="post">
 {% csrf_token %}
   <select name="team_do_thing">
-    <option selected="selected" disabled>Team Trading:</option>
+    <option value = 99 >Team Trading:</option>
     {% for team in team_list %}
         <option value={{ team.id }}>{{ team.team_name }}</option>
     {% endfor %}

@@ -17,7 +17,10 @@ def suggestions(request):
     for team in teams:
         team_list.append(team)
     team_traded = request.POST['team_do_thing']
-    that_team = get_object_or_404(Team, pk=team_traded)
+    if int(team_traded) == 99:
+        return render(request, 'trade/noselection.html')
+    else:
+        that_team = get_object_or_404(Team, pk=team_traded)
     possible_players = []
     min_stats = []
     max_stats = []
@@ -64,6 +67,7 @@ def suggestions(request):
     categories = ['GP','MPG','FGM','FGA','FG%','3PM','3PA','3P%','FTM','FTA','FT%','TOV','PF','OFR','DFR','RPG','APG','SPG','BPG','PPG']
     Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
     trades = Trading.trader()
+    best_player = None
     possible_players = []
     First = True
     for trade in trades:
@@ -73,4 +77,7 @@ def suggestions(request):
         else:
             temp = Player(trade[0][0],trade[0][1],trade[0][2],trade[0][3],trade[1],trade[2])
             possible_players.append(temp)
-    return render(request, 'trade/results.html', {'possible_players': possible_players,'best_player': best_player})
+    if best_player:
+        return render(request, 'trade/results.html', {'possible_players': possible_players,'best_player': best_player})
+    else:
+        return render(request, 'trade/invalid.html')
