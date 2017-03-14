@@ -10,6 +10,12 @@ limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
 
+
+"""
+Below are two dictionaries with data pulled from our crawler. This data is stored in JSON files currently
+to make testing easier and much quicker, without the need to crawl the website at each juncture.
+"""
+
 with open('return_dict.json') as data_file:    
     return_dict = json.load(data_file)
 with open('roster_dict.json') as data_file:    
