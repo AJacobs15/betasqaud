@@ -16,15 +16,15 @@ starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams" 
 
 def test_df(roster_dict = None, first_dict = None, switch = True): 
-"""
-Call upon crawler to get necessary data for trading algorithm. Outputs two objects: league 
-and rosters. League is a dataframe of all the players in the NBA. Rosters is a dictionary 
-with keys equal to the name of NBA teams and values equal to a datafram with the stats of 
-the players of that particular team.
+    """
+    Call upon crawler to get necessary data for trading algorithm. Outputs two objects: league 
+    and rosters. League is a dataframe of all the players in the NBA. Rosters is a dictionary 
+    with keys equal to the name of NBA teams and values equal to a datafram with the stats of 
+    the players of that particular team.
 
-If input "switch" is set to True, then test_df can skip crawling and convert two inputed
-dictionaries of stats, roster_dict and first_dict, into league and rosters. 
-"""
+    If input "switch" is set to True, then test_df can skip crawling and convert two inputed
+    dictionaries of stats, roster_dict and first_dict, into league and rosters. 
+    """
 
     if not switch:
         first_dict, roster_dict = jw.crawl(100, starting_url, limiting_domain)
@@ -91,7 +91,7 @@ def trade(team_a, targets, league, roster_dict, team_name):
     for player in agents:
         if count <= 3:
             trade_chips = []
-            trade_chips.append(rank)
+            #trade_chips.append(rank)
             trade_chips.append(player[1].loc["PLAYER"])
             count += 1
             chips = feasibility(team_a, player[1], league)
@@ -123,9 +123,12 @@ def feasibility(team_a, target, league):
         player = team_a.iloc[i]
         team.append((abs(stat_vector(target, league) - stat_vector(player, league)), player))
     team.sort()
-    rank = 1
+ 
+    output = []
     for tup in team:
-        rank += 1
+        output.append(tup[1])
+        
+    team = output  
 
     return team
     
