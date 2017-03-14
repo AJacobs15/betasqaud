@@ -74,17 +74,33 @@ class GM(object):
         for trade_list in agents:
             target_name = trade_list[0]
             trade_option = C.get_top_trade_data(target_name, PLAYER_DICT, limiting_domain) #get individual information
-            C.get_images(trade_option) #save images
-            clusters.plot(target_name) #get graphic
-            chips = []
+            if trade_option != None: #checks if read failed
+                C.get_images(trade_option) #save images
+                clusters.plot(target_name) #get graphic
+                chips = []
 
-            for trade_chip in trade_list[1:]:
-                name = trade_chip['PLAYER']
-                chips.append(name)
+                for trade_chip in trade_list[1:]:
+                    name = trade_chip['PLAYER']
+                    chips.append(name)
 
-            position = clusters.player_to_position(target_name)
+                position = clusters.player_to_position(target_name)
 
-            rv.append((trade_option, position, chips))
+                rv.append((trade_option, position, chips))
 
         return rv
+
+def example_trade():
+    '''
+    This is a function intended to demonstrate how we generate graphics for our trader.
+    Check the media folder after running to view the plots.
+
+    If you would like to test the other capabilities of our code, it makes much
+    more sense to test it in Django because there we deal with formatting and presenting our data.
+    '''
+
+    team_name = 'Boston Celtics'
+    constraints = (['PPG', 'RPG', 'SPG'], [5, 6, 0], [25, 15, 2])
+    gm = GM(team_name, constraints)
+    gm.trader()
+
 

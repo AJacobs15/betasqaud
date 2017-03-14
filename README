@@ -11,13 +11,13 @@ IMPORTANT FILES
 
     All of the final drafts of our code are in the Cluster folder, which is located in the website folder.
 
-    The important files are final.py, represent.py, julian_waugh_crawler.py (I am a narcissist), selections.py, and trader.py.
+    The important files are final.py, represent.py, julian_waugh_crawler.py (no comment), selections.py, and trader.py.
 
-    In the crawler, we gather all of our data. We do this frequently since NBA statistics are updated on a day to day basis. We then eliminate players who were waived and we handle the multiplicity that comes from players being traded. Our goal is to generate two dictionaries - return_dict and roster_dict - that describe statistics and individual player links for each player respectively. We scrape the statistics pages, roster pages, and individual player data pages of realgm.com.
+    In the crawler, we gather all of our data. This data is stored in json files which we later load into our trader. We then eliminate players who were waived and we handle the multiplicity that comes from players being traded (they show up on multiple teams on the website). Our goal is to generate two dictionaries - return_dict and roster_dict - that describe statistics and individual player links for each player respectively. We scrape the statistics pages, roster pages, and individual player data pages of realgm.com.
 
     In represent.py, we have our clustering code, which is capable of clustering the league into 5 positions based on statistics, generating plots for a player comparing him to his respective centroid, and returning the position of a player.
 
-    In trader.py, we have code that builds dataframes out of the scraped data, and our trade function.
+    In trader.py, we have code that builds dataframes out of the scraped data and our trade function.
 
     In selections.py, we apply the constraints to a league dataframe to get the players that match the user input.
 
@@ -25,28 +25,39 @@ IMPORTANT FILES
 
 How to Run Our Code (via final.py):
 
-BETASQUAD's Basketball Trade Optimizer can be accessed directly and excusivley via the final.py file located with the Cluster folder in BETASQUAD. 
+BETASQUAD's Basketball Trade Optimizer can be accessed directly and excusivley via the final.py file located with the Cluster folder in BETASQUAD. Or, it can be run through the Django interface, in which case
+navigating the website is very self explanatory.
 
 Steps to Success:
 
-1. Run final.py
+    1. Run final.py
 
-2. Set your original nba team. Example: 'Boston Celtics' or 'Miami Heat'
+    2. Set your original nba team. Example: 'Boston Celtics' or 'Miami Heat'
 
-3.Generate constraints for players you wish to trade for. Contraint is a tuple of three lists containing the categories, the minimums, and the maximums necessary to run the trade. (when running the web interface, these will be input by the user)
+    3.Generate constraints for players you wish to trade for. Contraint is a tuple of three lists containing the categories, the minimums, and the maximums necessary to run the trade. (when running the web interface, these will be input by the user)
 
-Here are the categories you can screen for:
-'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG','SPG', 'BPG', and 'PPG'. 
+    Here are the categories you can screen for:
+    'GP', 'MPG', 'FGM', 'FGA', 'FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'TOV', 'PF', 'OFR','DFR', 'RPG', 'APG','SPG', 'BPG', and 'PPG'. 
 
-Sample constraint: constraints = (['PPG', 'APG', 'BPG'], [5, 5, 1], [12, 8, 2])
+    Sample constraint: constraints = (['PPG', 'APG', 'BPG'], [5, 5, 1], [12, 8, 2])
 
-4. Create a GM object. This will be your way to interact with our trading algorithms. The GM class takes in two parameters, team and constraints, both of which you have just created via the previous steps.
+    4. Create a GM object. This will be your way to interact with our trading algorithms. The GM class takes in two parameters, team and constraints, both of which you have just created via the previous steps.
 
-Sample GM: gm = GM(team, constraints)
-*note that the variables team and constraint are created in steps 2 and 3.
+    Sample GM: gm = GM(team, constraints)
+    *note that the variables team and constraint are created in steps 2 and 3.
 
-5. Run the trader method within your GM. This will return a list of the following form: [((trade_option), [chips])...#repeated for each trade target#]  Trade option is a four-tuple of the form (player, data_string, img_links, award_list). chips is a list of the best trades from your team for the current player.
+    5. Run the trader method within your GM. This will return a list of the following form: [((trade_option), [chips])...#repeated for each trade target#]  Trade option is a four-tuple of the form (player, data_string, img_links, award_list). chips is a list of the best trades from your team for the current player.
 
-All image files are saved to a folder called media.
+    All image files are saved to a folder called media.
 
-6. Enjoy!
+    6. Enjoy!
+
+**PLEASE NOTE **
+    We went to a great deal of effort to write code that scrapes images from the web and code
+    that generates plots comparing a player's statistics to the cluster centroids. Unfortunately, we 
+    struggled to get these plots onto our website. Initially, we tried linking directly to the image, but determined we could not find where exactly to point django to.  We put copies of the image within every  folder within the webpage, but the image still did not come up.  Next, we attempted to use a static url to find the image, and this did not work.  Next we used a media url to find the image, and this did not work either.  We then attempted to use an Imagefield attribute to the model, which we then created a form off of, and this did not work either.  Finally, we linked directly to the image from the top directory user file, starting from :C//, while putting it in every possible file within django, and could not get the image to appear.
+
+
+    Please run final.py in the Cluster folder of betasquad (not the cluster folder in website),
+    run example_trade(), and check the media folder if you would like to see the images that we
+    generate.
