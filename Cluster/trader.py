@@ -51,7 +51,7 @@ def test_df(roster_dict = None, first_dict = None, switch = True):
         rosters[teamname] = team
     league = pd.concat(teams)
 
-    
+
     return league, rosters
 
 

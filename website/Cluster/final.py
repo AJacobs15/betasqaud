@@ -83,19 +83,3 @@ class GM(object):
         return trade_players
 
 
-def get_player(target_list, LEAGUE_DF):
-    '''
-    recursive function. If players given by target list are injured,
-    it returns the next one.
-
-    Write this later. Not necessary for what you need to do next.
-    '''
-    player = target[0]
-
-    next = False
-    pass
-
-
-
-
-
