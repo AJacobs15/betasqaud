@@ -61,7 +61,7 @@ class GM(object):
 
     def trader(self):
         '''
-        Returns a list of the following form: [((trade_option), [chips])...]  Trade option is a four-tuple of the form 
+        Returns a list of the following form: [((trade_option), [chips]) ...]  Trade option is a four-tuple of the form 
         (player, data_string, img_links, award_list). chips is a list 
         of the best trades from your team for the current player.
 
