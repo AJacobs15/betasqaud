@@ -1,5 +1,12 @@
 from django.db import models
 
+
+
+INDEX_MAP = {'0' : 'GP', '1' : 'MPG', '2' : 'FGM', '3' : 'FGA', '4' : 'FG%', '5' : '3PM', '6' : '3PA', '7' : '3P%', 
+                '8' : 'FTM', '9' : 'FTA', '10' : 'FT%', '11' : 'TOV', '12' : 'PF', '13' : 'ORB', '14': 'DRB', '15' : 'RPG',
+                '16': 'APG', '17' : 'SPG', '18' : 'BPG', '19' : 'PPG'}
+
+
 class Team(models.Model):
 
     team_name = models.CharField(max_length=200)
@@ -48,5 +55,14 @@ class Player:
 
         for player in data:
             if player == athlete:
-                return data[player]['STATS']
+                stats = data[player]['STATS']
+
+                nl = []
+                for i in range(len(stats)):
+                    stat = stats[i]
+                    stat = str(stat)
+                    info = INDEX_MAP[i] + ' : ' + stat
+                    nl.append(info)
+                rv = ', '.join(nl)
+                return rv
 
