@@ -10,26 +10,26 @@ limiting_domain = "basketball.realgm.com"
 starting_url = "http://basketball.realgm.com/nba/teams"
 limiting_path = "/nba/teams"
 
-
-
 with open('return_dict.json') as data_file:    
     return_dict = json.load(data_file)
-
 with open('roster_dict.json') as data_file:    
     ROSTER_DICT = json.load(data_file)
 
+'''
+First, we build a league dataframe and a team dictionary using the test_df function, which
+is contained in trader.py.
 
+We aggregate the roster dictionary to a league wide dictionary so we can use the league wide dictionary in our trader.
+
+We then cluster everything using a Cluster_DF object form represent.py
+'''
 
 LEAGUE_DF, TEAM_DICT = trader.test_df(ROSTER_DICT, return_dict, switch=True)
-
-
 PLAYER_DICT = C.aggregate_roster_dict(ROSTER_DICT)
-
-clusters = represent.Cluster_DF(LEAGUE_DF)
-
 CATEGORY_INDEX = 0
 MINIMUMS_INDEX = 1
 MAXIMUMS_INDEX = 2
+clusters = represent.Cluster_DF(LEAGUE_DF)
 
 class GM(object):
     '''
@@ -48,31 +48,30 @@ class GM(object):
         minimums = constraints[MINIMUMS_INDEX]
         maximums = constraints[MAXIMUMS_INDEX]
         self.team = team
-
-
         #apply the constraints
         constrained_league = selections.ideal_players(LEAGUE_DF, categories, minimums, maximums)
-
         self.constrained_league = constrained_league
-
         self.team_df = TEAM_DICT[team]
 
     def trader(self):
+        '''
+        Returns a list of the following form: [((trade_option), [chips])...]  Trade option is a four-tuple of the form 
+        (player, data_string, img_links, award_list). chips is a list 
+        of the best trades from your team for the current player.
 
-        #run the trade. It will print out values as it goes.
+        All image files are saved to a folder called media.
+        '''
+
         agents = trader.trade(self.team_df, self.constrained_league, LEAGUE_DF, ROSTER_DICT, self.team)
-
-
         rv = []
 
         for trade_list in agents:
             target_name = trade_list[0]
             trade_option = C.get_top_trade_data(target_name, PLAYER_DICT, limiting_domain) #get individual information
             C.get_images(trade_option) #save images
-
             clusters.plot(target_name) #get graphic
-
             chips = []
+
             for trade_chip in trade_list[1:]:
                 name = trade_chip['PLAYER']
                 chips.append(name)
@@ -82,31 +81,4 @@ class GM(object):
             rv.append((trade_option, position, chips))
 
         return rv
-
-
-
-
-       
-        
-
-
-
-        '''target_players = []
-        if len(agents) >= 5:
-            for x in range(5):
-                target_players.append(agents[x][1])
-        else:
-            for x in range(len(agents)):
-                target_players.append(agents[x][1])
-
-        #get position
-        trade_players = []
-        for player in target_players:
-            position = clusters.player_to_position(player)
-            temp = (player, position)
-            trade_players.append(temp)
-       
-
-        return trade_players'''
-
 
