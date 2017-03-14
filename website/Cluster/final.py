@@ -20,8 +20,13 @@ We aggregate the roster dictionary to a league wide dictionary so we can use the
 We then cluster everything using a Cluster_DF object form represent.py
 '''
 
-RETURN_DICT, ROSTER_DICT = crawl(100, starting_url, limiting_domain)
+with open('return_dict.json') as data_file:    
+    return_dict = json.load(data_file)
+with open('roster_dict.json') as data_file:    
+    ROSTER_DICT = json.load(data_file)
 
+
+    
 PLAYER_DICT = aggregate_roster_dict(ROSTER_DICT)
 
 LEAGUE_DF, TEAM_DICT = test_df(ROSTER_DICT, RETURN_DICT, switch=True)

@@ -25,14 +25,13 @@ IMPORTANT FILES
 
 How to Run Our Code (via final.py):
 
-BETASQUAD's Basketball Trade Optimizer can be accessed directly and excusivley via the final.py file located with
-the Cluster folder in BETASQUAD. 
+BETASQUAD's Basketball Trade Optimizer can be accessed directly and excusivley via the final.py file located with the Cluster folder in BETASQUAD. 
 
 Steps to Success:
 
 1. Run final.py
 
-2. Set your original nba team. Example: 'Boston Celtics', 'Miami Heat'
+2. Set your original nba team. Example: 'Boston Celtics' or 'Miami Heat'
 
 3.Generate constraints for players you wish to trade for. Contraint is a tuple of three lists containing the categories, the minimums, and the maximums necessary to run the trade. (when running the web interface, these will be input by the user)
 
