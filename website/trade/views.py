@@ -65,7 +65,12 @@ def suggestions(request):
     Trading = GM(that_team.team_name, [categories,min_stats,max_stats])
     players = Trading.trader()
     possible_players = []
+    First = True
     for player in players:
-        temp = Player(player[0], player[1])
-        possible_players.append(temp)
-    return render(request, 'trade/results.html', {'possible_players': possible_players})
+        if First:
+            best_player = Player(player[0], player[1])
+            First = False
+        else:
+            temp = Player(player[0], player[1])
+            possible_players.append(temp)
+    return render(request, 'trade/results.html', {'possible_players': possible_players,'best_player': best_player})

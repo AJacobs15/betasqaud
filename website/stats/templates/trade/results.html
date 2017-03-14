@@ -1,7 +1,12 @@
 <h1>Potential Players</h1>
 <ul>
+    Your Top Player is:
+    <li> {{best_player.name}}, who is a {{best_player.type}}: {{best_player.stats}}</li>
+    His graph is shown as:
+    <img src = "{{ best_player.name }}">
+    <li> Your other possibilities are: <li>
     {% for player in possible_players %}
-        <li> <a href="/trade/{{player.name}}/">{{ player.name }}</a>, who is a {{player.type}}: {{player.stats}} </li>
+        <li>{{ player.name }}, who is a {{player.type}}: {{player.stats}} </li>
     {% endfor %}
 </ul>
 <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
