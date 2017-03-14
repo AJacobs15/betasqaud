@@ -282,7 +282,7 @@ def get_top_trade_data(player_name, player_dict, limiting_domain):
     player_link = player_dict[player_name]
     data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
     if data_string != None: #this means the read failed, or in other words, the player is injured
-        return (player, data_string, img_links, award_list)
+        return (player_name, data_string, img_links, award_list)
 
 
 def get_images(trade_option):
@@ -304,9 +304,11 @@ def get_images(trade_option):
     player_name = '_'.join(player_name.split())
     team = player_name + '_team'
 
+    path = os.path.abspath('media')
 
-    urllib.request.urlretrieve(player_link, player_name + ".jpg")
-    urllib.request.urlretrieve(team_link, team + ".png")
+    urllib.request.urlretrieve(player_link, path + '/' + player_name + ".jpg")
+    urllib.request.urlretrieve(team_link, path + '/' + team + ".png")
+
 
 
 def make_soup(initial_url, limiting_domain, player_switch = False):
