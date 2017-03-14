@@ -277,8 +277,7 @@ def get_top_trade_data(player_name, player_dict, limiting_domain):
 
     returns a tuple containing the player name, data_string, image links, and award_list.
     '''
-
-    print(player_name) 
+ 
     player_link = player_dict[player_name]
     data_string, img_links, award_list = get_individual_player_data(player_link, limiting_domain)
     if data_string != None: #this means the read failed, or in other words, the player is injured
@@ -292,6 +291,7 @@ def get_images(trade_option):
     the trade option includes links to the images of players. Here, I access the images
     and save them.
     '''
+    """
     img_index = 2
     player_index = 0
     team_index = 1
@@ -308,7 +308,8 @@ def get_images(trade_option):
 
     urllib.request.urlretrieve(player_link, path + '/' + player_name + ".jpg")
     urllib.request.urlretrieve(team_link, path + '/' + team + ".png")
-
+    """
+    return None
 
 
 def make_soup(initial_url, limiting_domain, player_switch = False):

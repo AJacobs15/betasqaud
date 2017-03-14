@@ -39,6 +39,7 @@ class Player:
         self.type = cat
         self.tokens = tokens
         self.stats = self.find_stats(player)
+        self.graph = self.find_graph(player)
 
 
     def __str__(self):
@@ -54,3 +55,8 @@ class Player:
         for player in data:
             if player == athlete:
                 return data[player]['STATS']
+
+    def find_graph(self, player):
+        temp = player.split()
+        string = "/media/" + temp[0] + "_" + temp[1] + ".png"
+        return string

@@ -1,12 +1,13 @@
 <h1>Potential Players</h1>
 <ul>
     Your Top Trade Player is:
-    <li> {{best_player.name}}, who is a {{best_player.type}}.</li>
-    <li> Bio: {{best_player.data}} </li>
-    <li> Awards: {{best_player.awards}} </li>
-    <li> Stats: {{best_player.stats}} </li>
-    <li> He should be traded for with {{best_player.tokens}}</li>
-    <li> Your other possibilities are: <li>
+    <p> {{best_player.name}}, who is a {{best_player.type}}.</p>
+    <p> Bio: {{best_player.data}} </p>
+    <p> Awards: {{best_player.awards}} </p>
+    <p> Stats: {{best_player.stats}} </p>
+    <p> Graph: <img src = {{best_player.graph}}> </p>
+    <p> He should be traded for with {{best_player.tokens}}</p>
+    <p> Your other possibilities are: <p>
     {% for player in possible_players %}
         <li>{{ player.name }}, who is a {{player.type}}: {{player.stats}}; he is best traded for {{player.tokens}} </li>
     {% endfor %}
