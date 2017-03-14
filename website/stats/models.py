@@ -61,7 +61,7 @@ class Player:
                 for i in range(len(stats)):
                     stat = stats[i]
                     stat = str(stat)
-                    info = INDEX_MAP[i] + ' : ' + stat
+                    info = INDEX_MAP[str(i)] + ' : ' + stat
                     nl.append(info)
                 rv = ', '.join(nl)
                 return rv
